@@ -3,7 +3,8 @@ package net.satisfy.vinery.core.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -57,18 +58,18 @@ public class StorageBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.loadAdditional(nbt,provider);
-        this.size = nbt.getInt("size");
+    protected void loadAdditional(ValueInput nbt) {
+        super.loadAdditional(nbt);
+        this.size = nbt.getInt("size").orElse(0);
         this.inventory = NonNullList.withSize(this.size, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(nbt, this.inventory,provider);
+        ContainerHelper.loadAllItems(nbt, this.inventory);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt,HolderLookup.Provider provider) {
-        ContainerHelper.saveAllItems(nbt, this.inventory,provider);
+    protected void saveAdditional(ValueOutput nbt) {
+        ContainerHelper.saveAllItems(nbt, this.inventory);
         nbt.putInt("size", this.size);
-        super.saveAdditional(nbt,provider);
+        super.saveAdditional(nbt);
     }
 
     @Override
