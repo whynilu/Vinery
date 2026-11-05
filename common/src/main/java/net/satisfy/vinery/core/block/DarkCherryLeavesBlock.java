@@ -73,7 +73,7 @@ public class DarkCherryLeavesBlock extends LeavesBlock implements BonemealableBl
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        boolean canGrowCherries = ctx.getLevel().random.nextFloat() < 0.3f;
+        boolean canGrowCherries = ctx.getLevel().getRandom().nextFloat() < 0.3f;
         return updateDistance(this.defaultBlockState()
                 .setValue(PERSISTENT, true)
                 .setValue(CAN_GROW_CHERRIES, canGrowCherries)
