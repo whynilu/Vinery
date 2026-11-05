@@ -23,8 +23,4 @@ public class WinemakerHelmetItem extends Item {
         return hatTexture;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable TooltipContext ctx, @NotNull List<Component> tooltip, @NotNull TooltipFlag context) {
-
-    }
 }

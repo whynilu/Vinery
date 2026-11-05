@@ -22,8 +22,4 @@ public class WinemakerChestItem extends Item {
         return chestplateTexture;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-
-    }
 }

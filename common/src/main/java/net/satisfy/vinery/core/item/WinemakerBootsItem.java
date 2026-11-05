@@ -22,8 +22,4 @@ public class WinemakerBootsItem extends Item {
         return bootsTexture;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack itemStack, @Nullable TooltipContext tooltipContext, @NotNull List<Component> list, @NotNull TooltipFlag tooltipFlag) {
-
-    }
 }

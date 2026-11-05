@@ -22,8 +22,4 @@ public class WinemakerLegsItem extends Item {
         return leggingsTexture;
     }
 
-    @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable TooltipContext ctx, @NotNull List<Component> tooltip, @NotNull TooltipFlag context) {
-
-    }
 }
