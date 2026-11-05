@@ -39,9 +39,9 @@ public class GrapeType implements Comparable<GrapeType>, StringRepresentable {
     }
 
     public static GrapeType fromString(String id) {
-        for (GrapeType type : GRAPE_TYPE_TYPES) {
+        for (net.satisfy.vinery.core.wine.GrapeType type : GRAPE_TYPE_TYPES) {
             if (type.getSerializedName().equals(id)) {
-                return type;
+                return new GrapeType(type.getId(), type.isLattice(), type.isRed());
             }
         }
         return null;
