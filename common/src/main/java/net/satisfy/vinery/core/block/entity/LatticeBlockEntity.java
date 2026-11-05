@@ -52,7 +52,7 @@ public class LatticeBlockEntity extends BlockEntity {
         this.age = tag.getInt("Age").orElse(0);
         GrapeType loadedGrape = GrapeType.fromString(tag.getString("Grape").orElse(""));
         this.grape = loadedGrape != null ? loadedGrape : GrapeTypeRegistry.NONE;
-        this.showHanging = tag.getBoolean("ShowHanging");
+        this.showHanging = tag.getBooleanOr("ShowHanging", false);
         this.initialized = true;
     }
 
