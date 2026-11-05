@@ -1,7 +1,7 @@
 package net.satisfy.vinery.core.util;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -51,7 +51,7 @@ public final class VineryTrades {
             return false;
         }
         String[] parts = string.split("\\|");
-        if (parts.length != 6 || ResourceLocation.tryParse(parts[0]) == null || !(parts[1].equals("buy") || parts[1].equals("sell"))) {
+        if (parts.length != 6 || Identifier.tryParse(parts[0]) == null || !(parts[1].equals("buy") || parts[1].equals("sell"))) {
             return false;
         }
         try {
@@ -71,7 +71,7 @@ public final class VineryTrades {
                 continue;
             }
             String[] parts = entry.split("\\|");
-            Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(parts[0]));
+            Item item = BuiltInRegistries.ITEM.get(Identifier.parse(parts[0]));
             int price = Integer.parseInt(parts[2]);
             int count = Integer.parseInt(parts[3]);
             int maxUses = Integer.parseInt(parts[4]);
