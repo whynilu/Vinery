@@ -3,6 +3,8 @@ package net.satisfy.vinery.core.wine;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
@@ -67,7 +69,7 @@ public class WineEffects {
             String[] parts = entry.split("\\|");
             Identifier wine = parts.length == 4 ? Identifier.tryParse(parts[0].trim()) : null;
             Identifier effectId = parts.length == 4 ? Identifier.tryParse(parts[1].trim()) : null;
-            Holder<MobEffect> effect = effectId == null ? null : BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null);
+            Holder<MobEffect> effect = effectId == null ? null : BuiltInRegistries.MOB_EFFECT.getHolder(ResourceKey.create(Registries.MOB_EFFECT, effectId)).orElse(null);
             if (wine == null || effect == null) {
                 LOGGER.warn("Ignoring invalid wine effect entry '{}', expected wine|effect|amplifier|durationTicks", entry);
                 continue;
