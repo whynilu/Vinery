@@ -11,7 +11,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.vinery.core.block.GrapeBush;
-import net.satisfy.vinery.core.util.GrapeType;
+import net.satisfy.vinery.core.wine.GrapeType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -51,7 +51,7 @@ public abstract class FoxEntityEatSweetBerriesGoalMixin extends MoveToBlockGoal 
     private void pickGrapes(BlockState state, GrapeType type) {
         final int age = state.getValue(GrapeBush.AGE);
         state.setValue(GrapeBush.AGE, 1);
-        int j = 1 + field_17975.level().random.nextInt(2) + (age == 3 ? 1 : 0);
+        int j = 1 + field_17975.level().getRandom().nextInt(2) + (age == 3 ? 1 : 0);
         ItemStack itemStack = field_17975.getItemBySlot(EquipmentSlot.MAINHAND);
         ItemStack grape = getGrapeFor(type);
         if (itemStack.isEmpty()) {
