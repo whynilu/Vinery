@@ -11,9 +11,6 @@ architectury {
 subprojects {
     apply plugin: 'dev.architectury.loom-no-remap'
 
-    dependencies {
-        minecraft "net.minecraft:minecraft:${rootProject.minecraft_version}"
-    }
 }
 
 allprojects {
