@@ -3,7 +3,8 @@ package net.satisfy.vinery.core.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -46,7 +47,7 @@ public class CabinetBlockEntity extends RandomizableContainerBlockEntity {
             }
 
             @Override
-            protected boolean isOwnContainer(Player player) {
+            public boolean isOwnContainer(Player player) {
                 if (player.containerMenu instanceof ChestMenu) {
                     Container inventory = ((ChestMenu) player.containerMenu).getContainer();
                     return inventory == CabinetBlockEntity.this;
@@ -90,19 +91,19 @@ public class CabinetBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.saveAdditional(nbt,provider);
+    protected void saveAdditional(ValueOutput nbt) {
+        super.saveAdditional(nbt);
         if (!this.trySaveLootTable(nbt)) {
-            ContainerHelper.saveAllItems(nbt, this.inventory,provider);
+            ContainerHelper.saveAllItems(nbt, this.inventory);
         }
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt,HolderLookup.Provider provider) {
-        super.loadAdditional(nbt,provider);
+    protected void loadAdditional(ValueInput nbt) {
+        super.loadAdditional(nbt);
         this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         if (!this.tryLoadLootTable(nbt)) {
-            ContainerHelper.loadAllItems(nbt, this.inventory,provider);
+            ContainerHelper.loadAllItems(nbt, this.inventory);
         }
     }
 
@@ -134,11 +135,10 @@ public class CabinetBlockEntity extends RandomizableContainerBlockEntity {
     @Override
     public void startOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
-            this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+            this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 1.0);
         }
     }
 
-    @Override
     public void stopOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
             this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
