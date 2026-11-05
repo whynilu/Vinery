@@ -6,6 +6,10 @@ on:
     branches:
       - port/minecraft-26.3-fabric
 
+concurrency:
+  group: vinery-26.3-fabric-build
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
