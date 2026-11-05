@@ -1,6 +1,5 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -10,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class CompletionistBannerBlock extends BaseEntityBlock {
@@ -47,10 +48,6 @@ public class CompletionistBannerBlock extends BaseEntityBlock {
         makeDefaultState();
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return simpleCodec(CompletionistBannerBlock::new);
-    }
 
     @Nullable
     @Override
@@ -126,9 +123,9 @@ public class CompletionistBannerBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
         if (PlatformHelper.shouldShowTooltip()) {
-            tooltip.add(Component.translatable("tooltip.vinery.banner.thankyou_1").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
+            tooltip.accept(Component.translatable("tooltip.vinery.banner.thankyou_1").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
             tooltip.add(Component.empty());
             tooltip.add(Component.translatable("tooltip.vinery.banner.thankyou_2").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
             tooltip.add(Component.translatable("tooltip.vinery.banner.thankyou_4").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
