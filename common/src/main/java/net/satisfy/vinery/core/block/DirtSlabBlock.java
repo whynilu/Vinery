@@ -28,7 +28,7 @@ public class DirtSlabBlock extends SlabBlock {
         ItemStack heldItem = player.getItemInHand(hand);
 
         if (heldItem.is(ItemTags.SHOVELS)) {
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 BlockState pathState = ObjectRegistry.DIRT_PATH_SLAB.get().defaultBlockState()
                         .setValue(TYPE, state.getValue(TYPE))
                         .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
