@@ -12,7 +12,7 @@ subprojects {
     apply plugin: 'dev.architectury.loom-no-remap'
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft "net.minecraft:minecraft:${rootProject.minecraft_version}"
     }
 }
 
