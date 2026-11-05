@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.vinery.core.block.StorageBlock;
@@ -14,13 +14,13 @@ import net.satisfy.vinery.core.block.entity.StorageBlockEntity;
 import java.util.HashMap;
 
 public class StorageBlockEntityRenderer implements BlockEntityRenderer<StorageBlockEntity> {
-    private static final HashMap<ResourceLocation, StorageTypeRenderer> STORAGE_TYPES = new HashMap<>();
+    private static final HashMap<Identifier, StorageTypeRenderer> STORAGE_TYPES = new HashMap<>();
 
-    public static void registerStorageType(ResourceLocation name, StorageTypeRenderer renderer){
+    public static void registerStorageType(Identifier name, StorageTypeRenderer renderer){
         STORAGE_TYPES.put(name, renderer);
     }
 
-    public static StorageTypeRenderer getRendererForId(ResourceLocation name){
+    public static StorageTypeRenderer getRendererForId(Identifier name){
         return STORAGE_TYPES.get(name);
     }
 
@@ -39,7 +39,7 @@ public class StorageBlockEntityRenderer implements BlockEntityRenderer<StorageBl
             matrices.pushPose();
             applyBlockAngle(matrices, state, 180);
 
-            ResourceLocation type = sB.type();
+            Identifier type = sB.type();
             StorageTypeRenderer renderer = getRendererForId(type);
 
             if (renderer != null) {
