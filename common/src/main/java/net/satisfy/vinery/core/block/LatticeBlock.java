@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,13 +19,14 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,17 +34,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.satisfy.vinery.core.block.entity.LatticeBlockEntity;
 import net.satisfy.vinery.core.item.GrapeBushSeedItem;
 import net.satisfy.vinery.core.util.GeneralUtil;
-import net.satisfy.vinery.core.util.GrapeType;
+import net.satisfy.vinery.core.wine.GrapeType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class LatticeBlock extends StemBlock implements EntityBlock {
     public static final BooleanProperty SUPPORT = BooleanProperty.create("support");
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
-    public static final EnumProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<GeneralUtil.LineConnectingType> TYPE = GeneralUtil.LINE_CONNECTING_TYPE;
 
     protected static final VoxelShape EAST = box(0.0D, 0.0D, 0.0D, 2.0D, 16.0D, 16.0D);
@@ -159,8 +157,7 @@ public class LatticeBlock extends StemBlock implements EntityBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        Random rand = new Random();
-        if (rand.nextInt(100) >= 98 || isMature(state)) return;
+        if (random.nextInt(100) >= 98 || isMature(state)) return;
         int age = state.getValue(AGE);
         GrapeType type = state.getValue(GRAPE);
 
@@ -192,13 +189,13 @@ public class LatticeBlock extends StemBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        if (!state.canSurvive(world, pos)) world.scheduleTick(pos, this, 1);
-        return getConnection(state, world, pos);
+    protected @NotNull BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+        if (!state.canSurvive(level, pos)) ticks.scheduleTick(pos, this, 1);
+        return getConnection(state, level, pos);
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos pos, BlockState state, BonemealSource source) {
         return !isMature(state) && state.getValue(AGE) > 0;
     }
 
