@@ -8,6 +8,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 import net.minecraft.world.level.BlockGetter;
 import net.satisfy.vinery.core.registry.StorageTypeRegistry;
 import net.satisfy.vinery.core.registry.TagRegistry;
@@ -57,7 +59,7 @@ public class NineBottleStorageBlock extends StorageBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipDisplay display, Consumer<Component> tooltip) {
         MutableComponent allBold = Component.translatable("tooltip.vinery.small_bottle_first")
                 .withStyle(style -> style.withBold(true).withColor(ChatFormatting.GRAY));
         MutableComponent allRest = Component.translatable("tooltip.vinery.small_bottle_rest")
@@ -67,6 +69,6 @@ public class NineBottleStorageBlock extends StorageBlock {
         MutableComponent full = Component.translatable("tooltip.vinery.storage", combined)
                 .withStyle(ChatFormatting.GRAY);
 
-        tooltip.add(full);
+        tooltip.accept(full);
     }
 }
