@@ -40,19 +40,16 @@ public class ApplePressMashingRecipe implements Recipe<ApplePressMashingRecipeIn
         return this.output.copy();
     }
 
-    @Override
     public @NotNull NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> list = NonNullList.create();
         list.add(input);
         return list;
     }
 
-    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
-    @Override
     public @NotNull ItemStack getResultItem(HolderLookup.Provider registryAccess) {
         return this.output.copy();
     }
