@@ -3,8 +3,7 @@
   "package": "net.satisfy.vinery.core.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
-  "client": [
-  ],
+  "client": [],
   "mixins": [
     "BlockMixin",
     "BoneMealItemMixin",
@@ -12,8 +11,6 @@
     "FoxEatBerriesGoalMixin",
     "LivingEntityMixin",
     "BushBlockMixin",
-    "ShovelItemMixin",
-    "SpreadingSnowyDirtBlockMixin",
     "StorageBlockEntityMixin",
     "WanderingTraderSpawnerMixin"
   ],
