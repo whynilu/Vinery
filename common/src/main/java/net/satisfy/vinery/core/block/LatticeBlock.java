@@ -100,7 +100,7 @@ public class LatticeBlock extends StemBlock implements EntityBlock {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.TRY_WITH_EMPTY_HAND;
         int age = state.getValue(AGE);
 
-        if (stack.getItem() is(ItemTags.AXES)) {
+        if (stack.is(ItemTags.AXES)) {
             BlockState newState = state.setValue(SUPPORT, !state.getValue(SUPPORT));
             BlockState updateState = getConnection(newState, world, pos);
             world.setBlock(pos, updateState, 3);
