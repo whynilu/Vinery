@@ -27,8 +27,6 @@ jobs:
           java-version: '25'
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Inspect common compile classpath
-        run: ./gradlew --no-daemon :common:dependencies --configuration compileClasspath --console=plain
       - name: Build Fabric mod
         run: ./gradlew --no-daemon :fabric:build --stacktrace --info --console=plain
       - name: Upload mod jar
