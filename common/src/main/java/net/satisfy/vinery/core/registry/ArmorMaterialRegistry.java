@@ -1,23 +1,29 @@
 package net.satisfy.vinery.core.registry;
 
-import dev.architectury.registry.registries.DeferredRegister;
-import dev.architectury.registry.registries.DeferredSupplier;
-import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterials;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.satisfy.vinery.core.Vinery;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+public final class ArmorMaterialRegistry {
+    public static final int BASE_DURABILITY = 5;
+    public static final ResourceKey<EquipmentAsset> WINEMAKER_ASSET =
+            ResourceKey.create(EquipmentAssets.ROOT_ID, Vinery.identifier("winemaker"));
 
-public class ArmorMaterialRegistry {
-    private static final ArmorMaterial LEATHER = ArmorMaterials.LEATHER.value();
-    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Vinery.MOD_ID, Registries.ARMOR_MATERIAL);
-    public static final RegistrySupplier<ArmorMaterial> WINEMAKER_ARMOR = ARMOR_MATERIALS.register("winemaker",
-            ()-> new ArmorMaterial(LEATHER.defense(),LEATHER.enchantmentValue(),LEATHER.equipSound(), LEATHER.repairIngredient(), LEATHER.layers(),LEATHER.toughness(),LEATHER.knockbackResistance()));
+    public static final ArmorMaterial WINEMAKER_ARMOR = new ArmorMaterial(
+            BASE_DURABILITY,
+            ArmorMaterials.LEATHER.defense(),
+            ArmorMaterials.LEATHER.enchantmentValue(),
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            ArmorMaterials.LEATHER.toughness(),
+            ArmorMaterials.LEATHER.knockbackResistance(),
+            ArmorMaterials.LEATHER.repairIngredient(),
+            WINEMAKER_ASSET
+    );
+
+    private ArmorMaterialRegistry() {
+    }
 }
