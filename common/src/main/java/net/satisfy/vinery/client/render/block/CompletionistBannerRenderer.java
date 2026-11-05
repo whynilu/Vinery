@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.satisfy.vinery.core.Vinery;
@@ -22,7 +22,7 @@ import net.satisfy.vinery.core.block.CompletionistWallBannerBlock;
 import net.satisfy.vinery.core.block.entity.CompletionistBannerEntity;
 
 public class CompletionistBannerRenderer implements BlockEntityRenderer<CompletionistBannerEntity> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Vinery.MOD_ID, "banner"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Vinery.MOD_ID, "banner"), "main");
 
     public static final String FLAG = "flag";
     private static final String POLE = "pole";
@@ -48,7 +48,7 @@ public class CompletionistBannerRenderer implements BlockEntityRenderer<Completi
     }
 
     public static void renderBanner(PoseStack poseStack, MultiBufferSource multiBufferSource, int i, int j, ModelPart modelPart, CompletionistBannerEntity banner) {
-        ResourceLocation location = ((CompletionistBannerBlock) banner.getBlockState().getBlock()).getRenderTexture();
+        Identifier location = ((CompletionistBannerBlock) banner.getBlockState().getBlock()).getRenderTexture();
         VertexConsumer vc = multiBufferSource.getBuffer(RenderType.entitySolid(location));
 
         modelPart.render(poseStack, vc, i, j);
