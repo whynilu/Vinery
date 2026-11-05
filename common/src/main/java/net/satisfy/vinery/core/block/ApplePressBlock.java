@@ -1,8 +1,8 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -49,33 +49,25 @@ public class ApplePressBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return simpleCodec(ApplePressBlock::new);
-	}
-
-	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING, HALF);
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!world.isClientSide()) {
-			if (state.getValue(HALF) == DoubleBlockHalf.UPPER && state.getBlock() != newState.getBlock()) {
-				BlockPos lowerPos = pos.below();
-				BlockState lowerState = world.getBlockState(lowerPos);
-				if (lowerState.getBlock() == this && lowerState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-					world.setBlock(lowerPos, Blocks.AIR.defaultBlockState(), 35);
-				}
-			} else if (state.getValue(HALF) == DoubleBlockHalf.LOWER && state.getBlock() != newState.getBlock()) {
-				BlockPos upperPos = pos.above();
-				BlockState upperState = world.getBlockState(upperPos);
-				if (upperState.getBlock() == this && upperState.getValue(HALF) == DoubleBlockHalf.UPPER) {
-					world.setBlock(upperPos, Blocks.AIR.defaultBlockState(), 35);
-				}
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean movedByPiston) {
+		if (state.getValue(HALF) == DoubleBlockHalf.UPPER) {
+			BlockPos lowerPos = pos.below();
+			BlockState lowerState = world.getBlockState(lowerPos);
+			if (lowerState.is(this) && lowerState.getValue(HALF) == DoubleBlockHalf.LOWER) {
+				world.setBlock(lowerPos, Blocks.AIR.defaultBlockState(), 35);
+			}
+		} else {
+			BlockPos upperPos = pos.above();
+			BlockState upperState = world.getBlockState(upperPos);
+			if (upperState.is(this) && upperState.getValue(HALF) == DoubleBlockHalf.UPPER) {
+				world.setBlock(upperPos, Blocks.AIR.defaultBlockState(), 35);
 			}
 		}
-		super.onRemove(state, world, pos, newState, isMoving);
 	}
 
 	@Override
@@ -153,9 +145,9 @@ public class ApplePressBlock extends BaseEntityBlock {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-		BlockGetter world = ctx.getLevel();
+		Level world = ctx.getLevel();
 		BlockPos pos = ctx.getClickedPos();
-		if (pos.getY() < world.getMaxBuildHeight() - 1 && world.getBlockState(pos.above()).canBeReplaced(ctx)) {
+		if (pos.getY() < world.getMaxY() - 1 && world.getBlockState(pos.above()).canBeReplaced(ctx)) {
 			return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER);
 		}
 		return null;
