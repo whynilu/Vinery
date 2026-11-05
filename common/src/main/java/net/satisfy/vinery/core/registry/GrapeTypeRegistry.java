@@ -1,6 +1,6 @@
 package net.satisfy.vinery.core.registry;
 
-import net.satisfy.vinery.core.util.GrapeType;
+import net.satisfy.vinery.core.wine.GrapeType;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -44,6 +44,11 @@ public class GrapeTypeRegistry {
             throw new IllegalArgumentException("Grape type '" + id + "' is already registered");
         }
         return grapeType;
+    }
+
+    public static void register() {
+        addGrapeAttributes();
+        freeze();
     }
 
     public static void freeze() {
