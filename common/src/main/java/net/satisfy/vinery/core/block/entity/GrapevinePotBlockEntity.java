@@ -2,7 +2,8 @@ package net.satisfy.vinery.core.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -84,22 +85,15 @@ public class GrapevinePotBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        this.progress = tag.getInt("Progress");
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        this.progress = tag.getInt("Progress").orElse(0);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         tag.putInt("Progress", progress);
-    }
-
-    @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        saveAdditional(tag, provider);
-        return tag;
     }
 
     @Override
