@@ -26,7 +26,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.GrassColor;
 import net.satisfy.vinery.client.gui.ApplePressGui;
 import net.satisfy.vinery.client.gui.FermentationBarrelGui;
@@ -105,7 +105,7 @@ public class VineryClient {
         registerEntityRenderers();
     }
 
-    public static void registerStorageTypes(ResourceLocation location, StorageTypeRenderer renderer){
+    public static void registerStorageTypes(Identifier location, StorageTypeRenderer renderer){
         StorageBlockEntityRenderer.registerStorageType(location, renderer);
     }
 
