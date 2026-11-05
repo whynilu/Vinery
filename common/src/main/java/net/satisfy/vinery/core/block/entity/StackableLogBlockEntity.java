@@ -2,8 +2,6 @@ package net.satisfy.vinery.core.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -22,6 +20,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -46,7 +45,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
     private int burnTime = MAX_BURN_TIME;
 
     public StackableLogBlockEntity(BlockPos pos, BlockState state) {
-        super(EntityTypeRegistry.STACKABLE_LOG.get(), pos, state);
+        super(EntityTypeRegistry.STACKABLE_LOG_ENTITY.get(), pos, state);
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, StackableLogBlockEntity entity) {
@@ -55,7 +54,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
             return;
         }
         if (--entity.burnTime <= 0 || level.isRainingAt(pos.above()) && level.getRandom().nextInt(100) == 0) {
-            StackableLogBlock.extinguish(level, pos, state);
+            level.setBlock(pos, state.setValue(StackableLogBlock.FIRED, false), Block.UPDATE_ALL);
             return;
         }
         if (entity.cookTick(level, pos)) {
@@ -77,7 +76,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
             SingleRecipeInput input = new SingleRecipeInput(stack);
             if (!(level instanceof ServerLevel serverLevel)) continue;
             ItemStack result = quickCheck.getRecipeFor(input, serverLevel)
-                    .map(recipe -> recipe.value().assemble(input, serverLevel.registryAccess()))
+                    .map(recipe -> recipe.value().assemble(input))
                     .orElse(stack);
             if (result.isItemEnabled(level.enabledFeatures())) {
                 Containers.dropItemStack(level, pos.getX(), pos.getY() + 1, pos.getZ(), result);
@@ -150,7 +149,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
     @Override
     protected void saveAdditional(ValueOutput tag) {
         super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, items, true, provider);
+        ContainerHelper.saveAllItems(tag, items, true);
         tag.putIntArray(PROGRESS_KEY, cookingProgress);
         tag.putIntArray(TOTAL_KEY, cookingTime);
         tag.putInt(BURN_TIME_KEY, burnTime);
@@ -160,14 +159,12 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
         items.clear();
-        ContainerHelper.loadAllItems(tag, items, provider);
-        int[] progress = tag.getIntArray(PROGRESS_KEY);
+        ContainerHelper.loadAllItems(tag, items);
+        int[] progress = tag.getIntArray(PROGRESS_KEY).orElse(new int[SLOTS]);
         System.arraycopy(progress, 0, cookingProgress, 0, Math.min(SLOTS, progress.length));
-        int[] total = tag.getIntArray(TOTAL_KEY);
+        int[] total = tag.getIntArray(TOTAL_KEY).orElse(new int[SLOTS]);
         System.arraycopy(total, 0, cookingTime, 0, Math.min(SLOTS, total.length));
-        if (tag.contains(BURN_TIME_KEY)) {
-            burnTime = tag.getInt(BURN_TIME_KEY).orElse(0);
-        }
+        burnTime = tag.getInt(BURN_TIME_KEY).orElse(MAX_BURN_TIME);
     }
 
     @Override
@@ -176,9 +173,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        ContainerHelper.saveAllItems(tag, items, true, provider);
-        return tag;
+    public @NotNull net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider provider) {
+        return this.saveWithoutMetadata(provider);
     }
 }
