@@ -24,7 +24,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -186,7 +186,7 @@ public final class VineryCommands {
 
     private static int spawnWinemaker(CommandSourceStack source, BlockPos pos) {
         ServerLevel level = source.getLevel();
-        WanderingWinemakerEntity winemaker = EntityTypeRegistry.WANDERING_WINEMAKER.get().spawn(level, pos, MobSpawnType.COMMAND);
+        WanderingWinemakerEntity winemaker = EntityTypeRegistry.WANDERING_WINEMAKER.get().spawn(level, pos, EntitySpawnReason.COMMAND);
         if (winemaker == null) {
             source.sendFailure(Component.translatableWithFallback("command.vinery.winemaker.failed", "Couldn't spawn the Wandering Winemaker here"));
             return 0;
@@ -194,7 +194,7 @@ public final class VineryCommands {
         winemaker.setDespawnDelay(PlatformHelper.getTraderSpawnDelay());
         if (PlatformHelper.shouldSpawnWithMules()) {
             for (int i = 0; i < 2; i++) {
-                TraderMuleEntity mule = EntityTypeRegistry.MULE.get().spawn(level, pos, MobSpawnType.COMMAND);
+                TraderMuleEntity mule = EntityTypeRegistry.MULE.get().spawn(level, pos, EntitySpawnReason.COMMAND);
                 if (mule != null) {
                     mule.setLeashedTo(winemaker, true);
                 }
