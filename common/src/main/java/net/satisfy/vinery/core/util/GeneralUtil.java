@@ -192,7 +192,7 @@ public class GeneralUtil {
     }
 
     public static ChairEntity getChairEntity(Level world, BlockPos pos) {
-        if (!world.isClientSide()()) {
+        if (!world.isClientSide()) {
             Identifier id = getDimensionTypeId(world);
             if (CHAIRS.containsKey(id) && CHAIRS.get(id).containsKey(pos))
                 return CHAIRS.get(id).get(pos).getFirst();
