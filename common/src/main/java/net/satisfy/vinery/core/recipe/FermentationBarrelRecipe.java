@@ -158,7 +158,7 @@ public class FermentationBarrelRecipe implements Recipe<FermentationBarrelRecipe
             },
             buf -> {
                 int size = buf.readVarInt();
-                NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
+                NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.of());
                 for (int i = 0; i < size; i++) {
                     inputs.set(i, Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
                 }
