@@ -64,7 +64,7 @@ public class StackableLogBlock extends SlabBlock {
             world.setBlock(pos, state.setValue(FIRED, true), Block.UPDATE_ALL);
             world.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.NEUTRAL, 1.0F, 1.0F);
             return InteractionResult.SUCCESS;
-        } else if (stack.getItem() is(ItemTags.SHOVELS) && stackSize == SlabType.DOUBLE && state.getValue(FIRED)) {
+        } else if (stack.is(ItemTags.SHOVELS) && stackSize == SlabType.DOUBLE && state.getValue(FIRED)) {
             world.setBlockAndUpdate(pos, state.setValue(FIRED, false));
             world.playSound(player, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
             final boolean clientSide = world.isClientSide();
