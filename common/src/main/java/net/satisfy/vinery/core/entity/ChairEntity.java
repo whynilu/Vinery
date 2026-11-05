@@ -9,6 +9,8 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -75,9 +77,7 @@ public class ChairEntity extends Entity {
     }
 
     @Override
-    protected void positionRider(Entity passenger, MoveFunction move) {
-        move.accept(passenger, getX(), getY(), getZ());
-    }
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) { return false; }
 
     @Override
     public boolean isControlledByLocalInstance() {
@@ -95,7 +95,7 @@ public class ChairEntity extends Entity {
         } else {
             for (Property<?> prop : s.getProperties()) {
                 if (prop.getName().equals("facing") && prop instanceof net.minecraft.world.level.block.state.properties.EnumProperty dir) {
-                    yaw = s.getValue(dir).toYRot();
+                    yaw = s.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot();
                     break;
                 }
             }
