@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -31,7 +31,7 @@ public class NineBottleStorageBlock extends StorageBlock {
     }
 
     @Override
-    public ResourceLocation type() {
+    public Identifier type() {
         return StorageTypeRegistry.NINE_BOTTLE;
     }
 
