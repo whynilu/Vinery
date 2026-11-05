@@ -168,7 +168,7 @@ public class DarkCherryLeavesBlock extends LeavesBlock implements BonemealableBl
     }
 
     @Override
-    public int getLightBlock(BlockState state, BlockGetter world, BlockPos pos) {
+    public int getLightDampening(BlockState state) {
         return 1;
     }
 }
