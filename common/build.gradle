@@ -27,3 +27,4 @@ publishing {
 // EMI has no Minecraft 26.3 release yet; defer its optional integration.
 sourceSets.main.java.exclude 'net/satisfy/vinery/core/compat/emi/**'
 sourceSets.main.java.exclude 'net/satisfy/vinery/core/compat/jei/**'
+sourceSets.main.java.exclude 'net/satisfy/vinery/core/compat/rei/**'
