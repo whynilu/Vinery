@@ -113,53 +113,42 @@ public class FermentationBarrelRecipe implements Recipe<FermentationBarrelRecipe
         return true;
     }
 
-    public static class Serializer implements RecipeSerializer<FermentationBarrelRecipe> {
-        private static final MapCodec<Boolean> WINE_BOTTLE_CODEC = RecordCodecBuilder.mapCodec(inst ->
-                inst.group(
-                        Codec.BOOL.fieldOf("required").forGetter(b -> b)
-                ).apply(inst, b -> b)
-        );
-        @Override
-        public MapCodec<FermentationBarrelRecipe> codec() {
-            return RecordCodecBuilder.mapCodec(instance -> instance.group(
-                    Ingredient.CODEC.listOf().fieldOf("ingredients")
-                            .xmap(list -> NonNullList.of(Ingredient.EMPTY, list.toArray(new Ingredient[0])),
-                                    ingredients -> ingredients)
-                            .forGetter(FermentationBarrelRecipe::getInputs),
-                    FermentationBarrelRecipeInput.JuiceData.CODEC.fieldOf("juice").forGetter(FermentationBarrelRecipe::getJuiceData),
-                    ItemStack.CODEC.fieldOf("result").forGetter(r -> r.output),
-                    WINE_BOTTLE_CODEC.fieldOf("wine_bottle").forGetter(FermentationBarrelRecipe::isWineBottleRequired)
-            ).apply(instance, FermentationBarrelRecipe::new));
-        }
+    private static final MapCodec<Boolean> WINE_BOTTLE_CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(Codec.BOOL.fieldOf("required").forGetter(b -> b)).apply(inst, b -> b)
+    );
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FermentationBarrelRecipe> streamCodec() {
-            return StreamCodec.of(
-                    (buf, recipe) -> {
-                        buf.writeVarInt(recipe.inputs.size());
-                        for (Ingredient ingredient : recipe.inputs) {
-                            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ingredient);
-                        }
-                        FermentationBarrelRecipeInput.JuiceData.STREAM_CODEC.encode(buf,recipe.getJuiceData());
-                        ItemStack.STREAM_CODEC.encode(buf, recipe.output);
-                        buf.writeBoolean(recipe.wineBottleRequired);
-                    },
-                    buf -> {
-                        int size = buf.readVarInt();
-                        NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
-                        for (int i = 0; i < size; i++) {
-                            inputs.set(i, Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
-                        }
+    public static final MapCodec<FermentationBarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.listOf().fieldOf("ingredients")
+                    .xmap(list -> NonNullList.of(Ingredient.EMPTY, list.toArray(new Ingredient[0])), ingredients -> ingredients)
+                    .forGetter(FermentationBarrelRecipe::getInputs),
+            FermentationBarrelRecipeInput.JuiceData.CODEC.fieldOf("juice").forGetter(FermentationBarrelRecipe::getJuiceData),
+            ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.output),
+            WINE_BOTTLE_CODEC.fieldOf("wine_bottle").forGetter(FermentationBarrelRecipe::isWineBottleRequired)
+    ).apply(instance, FermentationBarrelRecipe::new));
 
-                        FermentationBarrelRecipeInput.JuiceData juiceData =
-                                FermentationBarrelRecipeInput.JuiceData.STREAM_CODEC.decode(buf);
-                        ItemStack output = ItemStack.STREAM_CODEC.decode(buf);
-                        boolean wineBottleRequired = buf.readBoolean();
+    public static final StreamCodec<RegistryFriendlyByteBuf, FermentationBarrelRecipe> STREAM_CODEC = StreamCodec.of(
+            (buf, recipe) -> {
+                buf.writeVarInt(recipe.inputs.size());
+                for (Ingredient ingredient : recipe.inputs) {
+                    Ingredient.CONTENTS_STREAM_CODEC.encode(buf, ingredient);
+                }
+                FermentationBarrelRecipeInput.JuiceData.STREAM_CODEC.encode(buf, recipe.getJuiceData());
+                ItemStack.STREAM_CODEC.encode(buf, recipe.output);
+                buf.writeBoolean(recipe.wineBottleRequired);
+            },
+            buf -> {
+                int size = buf.readVarInt();
+                NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
+                for (int i = 0; i < size; i++) {
+                    inputs.set(i, Ingredient.CONTENTS_STREAM_CODEC.decode(buf));
+                }
+                FermentationBarrelRecipeInput.JuiceData juiceData = FermentationBarrelRecipeInput.JuiceData.STREAM_CODEC.decode(buf);
+                ItemStack output = ItemStack.STREAM_CODEC.decode(buf);
+                boolean wineBottleRequired = buf.readBoolean();
+                return new FermentationBarrelRecipe(inputs, juiceData, output, wineBottleRequired);
+            }
+    );
 
-                        return new FermentationBarrelRecipe(inputs, juiceData, output, wineBottleRequired);
-                    }
-            );
-        }
-    }
+    public static final RecipeSerializer<FermentationBarrelRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
 }
