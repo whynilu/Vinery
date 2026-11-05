@@ -24,7 +24,7 @@ public class GrapevinePotBlockEntity extends BlockEntity {
     private long bottleStart = Long.MIN_VALUE / 2;
 
     public GrapevinePotBlockEntity(BlockPos pos, BlockState state) {
-        super(EntityTypeRegistry.GRAPEVINE_POT.get(), pos, state);
+        super(EntityTypeRegistry.GRAPEVINE_POT_ENTITY.get(), pos, state);
     }
 
     public static int stompsNeeded() {
