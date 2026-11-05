@@ -105,6 +105,10 @@ public class VineryFabricConfig implements ConfigData {
 
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.BoundedDiscrete(min = 0, max = 10000)
+        public int startDuration = 1600;
+
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.BoundedDiscrete(min = 0, max = 10000)
         public int durationPerYear = 200;
 
         @ConfigEntry.Gui.Tooltip
