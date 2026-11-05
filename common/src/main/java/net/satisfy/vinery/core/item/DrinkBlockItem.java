@@ -74,14 +74,6 @@ public class DrinkBlockItem extends BlockItem {
     }
 
     @Override
-    protected boolean updateCustomBlockEntityTag(BlockPos blockPos, Level level, @Nullable Player player, ItemStack itemStack, BlockState blockState) {
-        if (level.getBlockEntity(blockPos) instanceof StorageBlockEntity wineEntity) {
-            wineEntity.setStack(0, itemStack.copyWithCount(1));
-        }
-        return super.updateCustomBlockEntityTag(blockPos, level, player, itemStack, blockState);
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag tooltipFlag) {
         Level world = null;
         if (tooltipContext.registries() != null) {
@@ -130,7 +122,7 @@ public class DrinkBlockItem extends BlockItem {
 
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
-        if (!level.isClientSide()() && effectSupplier != null) {
+        if (!level.isClientSide() && effectSupplier != null) {
             if (itemStack.get(DataComponentRegistry.WINE_YEAR.get()) == null) {
                 WineYears.setWineYear(itemStack, level);
             }
@@ -159,25 +151,6 @@ public class DrinkBlockItem extends BlockItem {
     @Override
     public @NotNull InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
         return ItemUtils.startUsingInstantly(level, player, interactionHand);
-    }
-
-    @Override
-    public void onCraftedBy(ItemStack stack, Level world, Player player) {
-        super.onCraftedBy(stack, world, player);
-        if (world != null && !world.isClientSide) {
-            WineYears.setWineYear(stack, world);
-        }
-    }
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, world, entity, slot, selected);
-
-        if (world != null && !world.isClientSide) {
-            if (stack.get(DataComponentRegistry.WINE_YEAR.get()) == null) {
-                WineYears.setWineYear(stack, world);
-            }
-        }
     }
 
     private String toRoman(int number) {
