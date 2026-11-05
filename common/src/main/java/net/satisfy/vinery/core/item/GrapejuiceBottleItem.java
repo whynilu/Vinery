@@ -57,7 +57,7 @@ public class GrapejuiceBottleItem extends Item {
     }
 
     public @NotNull SoundEvent getEatingSound() {
-        return SoundEvents.HONEY_DRINK;
+        return SoundEvents.HONEY_DRINK.value();
     }
 
     public @NotNull InteractionResult use(Level level, Player player, InteractionHand interactionHand) {

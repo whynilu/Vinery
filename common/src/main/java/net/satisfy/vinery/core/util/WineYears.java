@@ -2,7 +2,7 @@ package net.satisfy.vinery.core.util;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.satisfy.vinery.core.components.WineYearComponent;
+import net.satisfy.vinery.core.component.WineYearComponent;
 import net.satisfy.vinery.core.registry.DataComponentRegistry;
 import net.satisfy.vinery.platform.PlatformHelper;
 
