@@ -1,8 +1,6 @@
 package net.satisfy.vinery.core.menu;
 
-import net.satisfy.foundation.menu.ExtendedSlot;
-import net.satisfy.foundation.menu.OutputSlot;
-import net.satisfy.foundation.recipe.book.StationRecipeBookMenu;
+import net.satisfy.vinery.client.gui.handler.slot.ExtendedSlot;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -65,7 +63,7 @@ public class FermentationBarrelMenu extends AbstractContainerMenu implements Sta
         this.addSlot(new ExtendedSlot(inventory, 2, 85, 58, this::isIngredient));
         this.addSlot(new ExtendedSlot(inventory, 3, 103, 58, this::isIngredient));
         this.addSlot(new ExtendedSlot(inventory, WINE_BOTTLE_SLOT, 123, 58, stack -> stack.is(ObjectRegistry.WINE_BOTTLE.get())));
-        this.addSlot(new OutputSlot(playerInventory.player, inventory, OUTPUT_SLOT_GENERAL, 103, 17));
+        this.addSlot(new FermentationBarrelOutputSlot(playerInventory.player, inventory, OUTPUT_SLOT_GENERAL, 103, 17));
     }
 
     private boolean canAddJuice(ItemStack stack) {
