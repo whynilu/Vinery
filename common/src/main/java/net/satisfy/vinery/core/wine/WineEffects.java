@@ -50,7 +50,7 @@ public class WineEffects {
     }
 
     private static List<? extends String> cachedSource;
-    private static Map<ResourceLocation, WineEffect> cache = Map.of();
+    private static Map<Identifier, WineEffect> cache = Map.of();
 
     public static @Nullable WineEffect get(Item item) {
         List<? extends String> source = PlatformHelper.getWineEffects();
@@ -61,12 +61,12 @@ public class WineEffects {
         return cache.get(BuiltInRegistries.ITEM.getKey(item));
     }
 
-    private static Map<ResourceLocation, WineEffect> parse(List<? extends String> entries) {
-        Map<ResourceLocation, WineEffect> result = new HashMap<>();
+    private static Map<Identifier, WineEffect> parse(List<? extends String> entries) {
+        Map<Identifier, WineEffect> result = new HashMap<>();
         for (String entry : entries) {
             String[] parts = entry.split("\\|");
-            ResourceLocation wine = parts.length == 4 ? ResourceLocation.tryParse(parts[0].trim()) : null;
-            ResourceLocation effectId = parts.length == 4 ? ResourceLocation.tryParse(parts[1].trim()) : null;
+            Identifier wine = parts.length == 4 ? Identifier.tryParse(parts[0].trim()) : null;
+            Identifier effectId = parts.length == 4 ? Identifier.tryParse(parts[1].trim()) : null;
             Holder<MobEffect> effect = effectId == null ? null : BuiltInRegistries.MOB_EFFECT.getHolder(effectId).orElse(null);
             if (wine == null || effect == null) {
                 LOGGER.warn("Ignoring invalid wine effect entry '{}', expected wine|effect|amplifier|durationTicks", entry);
