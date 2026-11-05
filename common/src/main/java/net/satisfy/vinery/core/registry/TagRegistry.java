@@ -19,5 +19,7 @@ public class TagRegistry {
     public static final TagKey<Item> RED_SAVANNA_GRAPEJUICE = TagKey.create(Registries.ITEM, Vinery.identifier("red_savanna_grapejuice"));
     public static final TagKey<Item> RED_TAIGA_GRAPEJUICE = TagKey.create(Registries.ITEM, Vinery.identifier("red_taiga_grapejuice"));
     public static final TagKey<Item> RED_JUNGLE_GRAPEJUICE = TagKey.create(Registries.ITEM, Vinery.identifier("red_jungle_grapejuice"));
+    public static final TagKey<Item> CRIMSON_GRAPEJUICE = TagKey.create(Registries.ITEM, Vinery.identifier("crimson_grapejuice"));
+    public static final TagKey<Item> WARPED_GRAPEJUICE = TagKey.create(Registries.ITEM, Vinery.identifier("warped_grapejuice"));
     public static final TagKey<Item> GRAPE_SEEDS = TagKey.create(Registries.ITEM, Vinery.identifier("grape_seeds"));
 }
