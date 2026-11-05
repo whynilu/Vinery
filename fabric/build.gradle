@@ -48,3 +48,6 @@ sourcesJar {
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }
+
+// Optional REI client integration is excluded for the 26.3 base port.
+sourceSets.main.java.exclude 'net/satisfy/vinery/fabric/core/rei/**'
