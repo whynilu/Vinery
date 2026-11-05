@@ -29,16 +29,23 @@ dependencies {
 
 processResources {
     inputs.property 'version', project.version
-    filesMatching('fabric.mod.json') { expand 'version': project.version }
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
 }
 
 shadowJar {
     configurations = [project.configurations.shadowCommon]
-    archiveClassifier = 'dev-shadow'
+    archiveClassifier = ''
 }
 
-remapJar { inputFile.set shadowJar.archiveFile }
-jar { archiveClassifier = 'dev' }
+jar {
+    archiveClassifier = 'dev'
+}
+
+tasks.named('assemble') {
+    dependsOn tasks.named('shadowJar')
+}
 
 sourcesJar {
     def commonSources = project(':common').sourcesJar
