@@ -2,7 +2,8 @@ package net.satisfy.vinery.core.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -46,17 +47,17 @@ public class LatticeBlockEntity extends BlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag,provider);
-        this.age = tag.getInt("Age");
-        GrapeType loadedGrape = GrapeType.fromString(tag.getString("Grape"));
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        this.age = tag.getInt("Age").orElse(0);
+        GrapeType loadedGrape = GrapeType.fromString(tag.getString("Grape").orElse(""));
         this.grape = loadedGrape != null ? loadedGrape : GrapeTypeRegistry.NONE;
         this.showHanging = tag.getBoolean("ShowHanging");
         this.initialized = true;
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag,HolderLookup.Provider provider) {
+    protected void saveAdditional(ValueOutput tag) {
         tag.putInt("Age", age);
         tag.putString("Grape", grape.getSerializedName());
         tag.putBoolean("ShowHanging", showHanging);
