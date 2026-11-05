@@ -271,16 +271,16 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
     }
 
     private boolean isValidForApplePressMashing(ItemStack stack) {
-        if (level == null) return false;
-        return level instanceof ServerLevel serverLevel ? serverLevel.recipeAccess().recipeMap() : net.minecraft.world.item.crafting.RecipeMap.EMPTY
+        if (!(level instanceof ServerLevel serverLevel)) return false;
+        return serverLevel.recipeAccess().recipeMap()
                 .byType(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get())
                 .stream()
                 .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
     }
 
     private boolean isValidForApplePressFermenting(ItemStack stack) {
-        if (level == null) return false;
-        return level.getRecipeManager()
+        if (!(level instanceof ServerLevel serverLevel)) return false;
+        return serverLevel.recipeAccess().recipeMap()
                 .byType(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get())
                 .stream()
                 .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
