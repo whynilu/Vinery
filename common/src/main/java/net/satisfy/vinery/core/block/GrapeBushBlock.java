@@ -39,7 +39,7 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
 
     public final GrapeType type;
     public static final MapCodec<GrapeBushBlock> CODEC = RecordCodecBuilder.mapCodec(inst-> inst.group(
-            Properties.CODEC.fieldOf("settings").forGetter(GrapeBushBlock::properties),
+            BlockBehaviour.propertiesCodec(),
             GrapeType.CODEC.fieldOf("type").forGetter(GrapeBushBlock::grapeType)
     ).apply(inst,GrapeBushBlock::new));
     public GrapeBushBlock(Properties settings, GrapeType type) {
@@ -69,11 +69,11 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
         if (!bl && stack.is(Items.BONE_MEAL)) {
             return ItemInteractionResult.TRY_WITH_EMPTY_HAND;
         } else if (i > 1) {
-            int x = level.random.nextInt(2);
+            int x = level.getRandom().nextInt(2);
             popResource(level, pos, new ItemStack(getGrapeType().getItem(), x + (bl ? 1 : 0)));
-            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.getRandom().nextFloat() * 0.4F);
             level.setBlock(pos, state.setValue(AGE, 1), 2);
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide());
         } else {
             return super.useItemOn(stack,state, level, pos, player, hand, hit);
         }
@@ -126,7 +126,7 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState floor, BlockGetter level, BlockPos pos) {
-        return floor.isSolidRender(level, pos);
+        return floor.isSolidRender();
     }
 
     public GrapeType grapeType() {
