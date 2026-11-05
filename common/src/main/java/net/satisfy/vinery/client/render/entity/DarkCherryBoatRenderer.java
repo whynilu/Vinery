@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.satisfy.vinery.core.Vinery;
@@ -31,14 +31,14 @@ import java.util.stream.Stream;
 
 public class DarkCherryBoatRenderer extends EntityRenderer<Boat>
 {
-    private final Map<DarkCherryBoatEntity.Type, Pair<ResourceLocation, ListModel<Boat>>> boatResources;
+    private final Map<DarkCherryBoatEntity.Type, Pair<Identifier, ListModel<Boat>>> boatResources;
 
     public DarkCherryBoatRenderer(EntityRendererProvider.Context context, boolean hasChest)
     {
         super(context);
         this.shadowRadius = 0.8F;
         this.boatResources = Stream.of(DarkCherryBoatEntity.Type.values()).collect(ImmutableMap.toImmutableMap((key) -> key, (model) -> {
-            return Pair.of(ResourceLocation.fromNamespaceAndPath(Vinery.MOD_ID, getTextureLocation(model, hasChest)), createBoatModel(context, model, hasChest));
+            return Pair.of(Identifier.fromNamespaceAndPath(Vinery.MOD_ID, getTextureLocation(model, hasChest)), createBoatModel(context, model, hasChest));
         }));
     }
 
@@ -63,8 +63,8 @@ public class DarkCherryBoatRenderer extends EntityRenderer<Boat>
             poseStack.mulPose((new Quaternionf()).setAngleAxis(boat.getBubbleAngle(partialTicks) * 0.017453292F, 1.0F, 0.0F, 1.0F));
         }
 
-        Pair<ResourceLocation, ListModel<Boat>> pair = this.getModelWithLocation(boat);
-        ResourceLocation resourcelocation = (ResourceLocation)pair.getFirst();
+        Pair<Identifier, ListModel<Boat>> pair = this.getModelWithLocation(boat);
+        Identifier resourcelocation = (Identifier)pair.getFirst();
         ListModel<Boat> listmodel = (ListModel)pair.getSecond();
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
@@ -84,12 +84,12 @@ public class DarkCherryBoatRenderer extends EntityRenderer<Boat>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Boat boat)
+    public Identifier getTextureLocation(Boat boat)
     {
-        return (ResourceLocation)this.getModelWithLocation(boat).getFirst();
+        return (Identifier)this.getModelWithLocation(boat).getFirst();
     }
 
-    public Pair<ResourceLocation, ListModel<Boat>> getModelWithLocation(Boat boat)
+    public Pair<Identifier, ListModel<Boat>> getModelWithLocation(Boat boat)
     {
         if (boat instanceof DarkCherryChestBoatEntity)
             return this.boatResources.get(((DarkCherryChestBoatEntity)boat).getWoodType());
@@ -104,7 +104,7 @@ public class DarkCherryBoatRenderer extends EntityRenderer<Boat>
 
     private static ModelLayerLocation createLocation(String name, String layer)
     {
-        return new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Vinery.MOD_ID, name), layer);
+        return new ModelLayerLocation(Identifier.fromNamespaceAndPath(Vinery.MOD_ID, name), layer);
     }
 
     public static ModelLayerLocation createBoatModelName(DarkCherryBoatEntity.Type model)
