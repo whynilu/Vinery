@@ -1,6 +1,5 @@
 package net.satisfy.vinery.core;
 
-import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -15,9 +14,6 @@ public final class CommonSetup {
     public static void init() {
         registerFlammables();
         registerCompostables();
-    }
-
-    private static void registerRarities() {
     }
 
     private static void registerFlammables() {
