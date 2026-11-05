@@ -122,6 +122,11 @@ public class PlatformHelper {
     }
 
     @ExpectPlatform
+    public static int getWineStartDuration() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
     public static int getWineDurationPerYear() {
         throw new AssertionError();
     }
