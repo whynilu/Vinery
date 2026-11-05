@@ -60,7 +60,7 @@ public class ApplePressBlock extends BaseEntityBlock {
 
 	@Override
 	public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			if (state.getValue(HALF) == DoubleBlockHalf.UPPER && state.getBlock() != newState.getBlock()) {
 				BlockPos lowerPos = pos.below();
 				BlockState lowerState = world.getBlockState(lowerPos);
@@ -80,7 +80,7 @@ public class ApplePressBlock extends BaseEntityBlock {
 
 	@Override
 	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			BlockPos otherPartPos;
 			BlockState otherPartState;
 
@@ -124,7 +124,7 @@ public class ApplePressBlock extends BaseEntityBlock {
 			return InteractionResult.PASS;
 		}
 
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			MenuProvider screenHandlerFactory = state.getMenuProvider(world, pos);
 			if (screenHandlerFactory != null) {
 				player.openMenu(screenHandlerFactory);
