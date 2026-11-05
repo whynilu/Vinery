@@ -1,6 +1,7 @@
 package net.satisfy.vinery.core.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -74,8 +75,9 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
                 continue;
             }
             SingleRecipeInput input = new SingleRecipeInput(stack);
-            ItemStack result = quickCheck.getRecipeFor(input, level)
-                    .map(recipe -> recipe.value().assemble(input, level.registryAccess()))
+            if (!(level instanceof ServerLevel serverLevel)) continue;
+            ItemStack result = quickCheck.getRecipeFor(input, serverLevel)
+                    .map(recipe -> recipe.value().assemble(input, serverLevel.registryAccess()))
                     .orElse(stack);
             if (result.isItemEnabled(level.enabledFeatures())) {
                 Containers.dropItemStack(level, pos.getX(), pos.getY() + 1, pos.getZ(), result);
@@ -104,7 +106,8 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
         if (level == null || items.stream().noneMatch(ItemStack::isEmpty)) {
             return Optional.empty();
         }
-        return quickCheck.getRecipeFor(new SingleRecipeInput(stack), level);
+        if (!(level instanceof ServerLevel serverLevel)) return Optional.empty();
+        return quickCheck.getRecipeFor(new SingleRecipeInput(stack), serverLevel);
     }
 
     public boolean placeFood(@Nullable LivingEntity entity, ItemStack stack, int time) {

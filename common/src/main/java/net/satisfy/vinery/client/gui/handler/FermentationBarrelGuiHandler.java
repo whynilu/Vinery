@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.satisfy.vinery.client.gui.handler.slot.ExtendedSlot;
 import net.satisfy.vinery.client.gui.handler.slot.FermentationBarrelOutputSlot;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
@@ -69,8 +70,13 @@ public class FermentationBarrelGuiHandler extends AbstractContainerMenu {
     }
 
     private boolean isIngredient(ItemStack stack) {
-        // Recipe definitions are server-side in 26.3; the block entity validates inputs.
-        return true;
+        // The server owns the complete recipe set. On the client, leave the slot
+        // permissive; the server-side block entity performs authoritative validation.
+        if (!(level instanceof ServerLevel serverLevel)) return true;
+        return serverLevel.recipeAccess().getRecipes().stream()
+                .filter(recipe -> recipe.value() instanceof FermentationBarrelRecipe)
+                .map(recipe -> (FermentationBarrelRecipe) recipe.value())
+                .anyMatch(recipe -> recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
     }
 
     @Override

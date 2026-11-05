@@ -415,11 +415,11 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
     }
 
     private boolean isIngredient(ItemStack stack) {
-        if (level == null) return false;
-        return level.getRecipeManager()
-                .byType(RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get())
-                .stream()
-                .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
+        if (!(level instanceof ServerLevel serverLevel)) return false;
+        return serverLevel.recipeAccess().getRecipes().stream()
+                .filter(recipe -> recipe.value() instanceof FermentationBarrelRecipe)
+                .map(recipe -> (FermentationBarrelRecipe) recipe.value())
+                .anyMatch(recipe -> recipe.getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
     }
 
     @Override

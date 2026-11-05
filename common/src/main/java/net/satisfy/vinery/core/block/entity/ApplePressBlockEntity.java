@@ -16,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -131,11 +130,8 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
         if (hasInput(entity, 0)) {
             ApplePressMashingRecipeInput input = new ApplePressMashingRecipeInput(entity.getItem(0));
-            if(serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(), input, serverWorld).isEmpty()) {
-                return;
-            }
-            Recipe<?> recipe1 = serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(), input, serverWorld).get().value();
-            if (recipe1 instanceof ApplePressMashingRecipe mashingRecipe) {
+            var recipe1 = serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(), input, serverWorld);
+            if (recipe1.isPresent() && recipe1.get().value() instanceof ApplePressMashingRecipe mashingRecipe) {
                 if (canProcessMashing(entity, mashingRecipe)) {
                     entity.progress1++;
                     if (entity.progress1 >= entity.maxProgress1) {
@@ -154,9 +150,8 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
         if (hasInput(entity, 1)) {
             ApplePressFermentingRecipeInput input = new ApplePressFermentingRecipeInput(entity.getItem(1));
-            if(serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, serverWorld).isEmpty()) return;
-            Recipe<?> recipe2 = serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, serverWorld).get().value();
-            if (recipe2 instanceof ApplePressFermentingRecipe fermentingRecipe) {
+            var recipe2 = serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, serverWorld);
+            if (recipe2.isPresent() && recipe2.get().value() instanceof ApplePressFermentingRecipe fermentingRecipe) {
                 if (canProcessFermenting(entity, fermentingRecipe)) {
                     entity.progress2++;
                     if (entity.progress2 >= entity.maxProgress2) {
