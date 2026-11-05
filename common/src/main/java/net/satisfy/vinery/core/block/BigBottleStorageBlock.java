@@ -88,7 +88,6 @@ public class BigBottleStorageBlock extends StorageBlock {
         return 0;
     }
 
-    @Override
     public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
         MutableComponent allBold = Component.translatable("tooltip.vinery.large_bottle_first")
                 .withStyle(style -> style.withBold(true).withColor(ChatFormatting.GRAY));

@@ -122,7 +122,6 @@ public class CompletionistBannerBlock extends BaseEntityBlock {
         return Vinery.identifier("textures/banner/vinery_banner.png");
     }
 
-    @Override
     public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag tooltipFlag) {
         if (PlatformHelper.shouldShowTooltip()) {
             tooltip.accept(Component.translatable("tooltip.vinery.banner.thankyou_1").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
