@@ -39,7 +39,7 @@ public class LatticeBlockEntity extends BlockEntity {
     public void setGrapeType(GrapeType grape) {
         this.grape = grape;
         if (!initialized && level != null) {
-            this.showHanging = level.random.nextFloat() < 0.15f;
+            this.showHanging = level.getRandom().nextFloat() < 0.15f;
             this.initialized = true;
         }
         setChanged();
@@ -76,7 +76,7 @@ public class LatticeBlockEntity extends BlockEntity {
     }
 
     private void sync() {
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
