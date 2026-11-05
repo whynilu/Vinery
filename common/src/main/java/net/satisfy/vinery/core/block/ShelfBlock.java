@@ -37,7 +37,7 @@ public class ShelfBlock extends StorageBlock {
         return shape;
     };
 
-    public static final Map<Direction, VoxelShape> SHAPE = net.minecraft.Util.make(new HashMap<>(), map -> {
+    public static final Map<Direction, VoxelShape> SHAPE = net.minecraft.util.Util.make(new HashMap<>(), map -> {
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             map.put(direction, GeneralUtil.rotateShape(Direction.NORTH, direction, voxelShapeSupplier.get()));
         }

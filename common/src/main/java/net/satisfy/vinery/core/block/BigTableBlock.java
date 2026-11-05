@@ -101,7 +101,7 @@ public class BigTableBlock extends HorizontalDirectionalBlock {
 
 	public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
 		super.setPlacedBy(world, pos, state, placer, itemStack);
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			placeOtherPart(world, pos, state);
 		}
 	}

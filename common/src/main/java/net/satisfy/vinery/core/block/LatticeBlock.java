@@ -17,7 +17,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
@@ -199,7 +198,7 @@ public class LatticeBlock extends StemBlock implements EntityBlock {
         return !isMature(state) && state.getValue(AGE) > 0;
     }
 
-    public BlockState getConnection(BlockState state, LevelAccessor level, BlockPos currentPos) {
+    public BlockState getConnection(BlockState state, LevelReader level, BlockPos currentPos) {
         Direction facing = state.getValue(FACING);
         boolean bottom = state.getValue(BOTTOM);
 
