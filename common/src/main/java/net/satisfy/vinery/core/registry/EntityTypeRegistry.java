@@ -49,7 +49,7 @@ public class EntityTypeRegistry {
             );
 
     public static final Supplier<EntityType<DarkCherryBoatEntity>> DARK_CHERRY_BOAT = PlatformHelper.registerBoatType("dark_cherry_boat", DarkCherryBoatEntity::new, MobCategory.MISC, 1.375F, 0.5625F, 10);
-    public static final Supplier<EntityType<DarkCherryChestBoatEntity>> DARK_CHERRY_CHEST_BOAT = registerEntity("dark_cherry_chest_boat", () -> EntityType.Builder.of(DarkCherryChestBoatEntity::new, MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE, Vinery.identifier("dark_cherry_chest_boat"))));
+    public static final Supplier<EntityType<DarkCherryChestBoatEntity>> DARK_CHERRY_CHEST_BOAT = registerEntity("dark_cherry_chest_boat", () -> EntityType.Builder.<DarkCherryChestBoatEntity>of((type, level) -> new DarkCherryChestBoatEntity(type, level), MobCategory.MISC).sized(1.375F, 0.5625F).clientTrackingRange(10).build(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE, Vinery.identifier("dark_cherry_chest_boat"))));
 
     public static final RegistrySupplier<BlockEntityType<ApplePressBlockEntity>> APPLE_PRESS_BLOCK_ENTITY = registerBlockEntity("apple_press", () -> new BlockEntityType<>(ApplePressBlockEntity::new, Set.of(APPLE_PRESS.get())));
     public static final RegistrySupplier<BlockEntityType<FermentationBarrelBlockEntity>> FERMENTATION_BARREL_ENTITY = registerBlockEntity("fermentation_barrel", () -> new BlockEntityType<>(FermentationBarrelBlockEntity::new, Set.of(FERMENTATION_BARREL.get())));
