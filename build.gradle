@@ -10,8 +10,14 @@ architectury {
 
 subprojects {
     apply plugin: 'dev.architectury.loom-no-remap'
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        mappings loom.officialMojangMappings()
     }
 }
 
