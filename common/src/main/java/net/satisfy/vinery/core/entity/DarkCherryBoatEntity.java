@@ -25,7 +25,7 @@ public class DarkCherryBoatEntity extends Boat {
     private static final EntityDataAccessor<Integer> WOOD_TYPE = SynchedEntityData.defineId(DarkCherryBoatEntity.class, EntityDataSerializers.INT);
 
     public DarkCherryBoatEntity(EntityType<? extends Boat> type, Level level) {
-        super(type, level);
+        super(type, level, () -> ObjectRegistry.DARK_CHERRY_BOAT.get());
         this.blocksBuilding = true;
     }
 
@@ -44,14 +44,12 @@ public class DarkCherryBoatEntity extends Boat {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-        if (pCompound.contains("Type", 8)) {
-            this.setWoodType(Type.byName(pCompound.getString("Type")));
-        }
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput pCompound) {
+        pCompound.getString("Type").ifPresent(value -> this.setWoodType(Type.byName(value)));
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putString("Type", this.getWoodType().getName());
     }
@@ -64,10 +62,6 @@ public class DarkCherryBoatEntity extends Boat {
         this.entityData.set(WOOD_TYPE, type.ordinal());
     }
 
-    @Override
-    public @NotNull Item getDropItem() {
-        return this.getWoodType().getItem().get();
-    }
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
