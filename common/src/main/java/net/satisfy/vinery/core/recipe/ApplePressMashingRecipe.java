@@ -36,7 +36,7 @@ public class ApplePressMashingRecipe implements Recipe<ApplePressMashingRecipeIn
     }
 
     @Override
-    public @NotNull ItemStack assemble(ApplePressMashingRecipeInput container, HolderLookup.Provider registryAccess) {
+    public @NotNull ItemStack assemble(ApplePressMashingRecipeInput container) {
         return this.output.copy();
     }
 
@@ -59,13 +59,33 @@ public class ApplePressMashingRecipe implements Recipe<ApplePressMashingRecipeIn
 
 
     @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<ApplePressMashingRecipe> getSerializer() {
         return RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public RecipeType<ApplePressMashingRecipe> getType() {
         return RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public net.minecraft.world.item.crafting.RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
     }
 
     @Override
