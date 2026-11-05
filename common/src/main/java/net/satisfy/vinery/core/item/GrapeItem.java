@@ -30,7 +30,7 @@ public class GrapeItem extends Item {
                 if (level.getRandom().nextFloat() < CHANCE_OF_GETTING_SEEDS) {
                     ItemStack returnStack = new ItemStack(returnItem);
                     if (!player.getInventory().add(returnStack)) {
-                        player.drop(returnStack, false);
+                        player.drop(returnStack, false, net.minecraft.util.Prediction.SERVER_ONLY);
                     }
                 }
             }

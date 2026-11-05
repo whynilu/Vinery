@@ -29,7 +29,7 @@ public class GrapejuiceBottleItem extends Item {
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
         }
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             livingEntity.removeEffect(MobEffects.POISON);
         }
 
@@ -37,7 +37,7 @@ public class GrapejuiceBottleItem extends Item {
             itemStack.shrink(1);
             ItemStack itemStack2 = new ItemStack(ObjectRegistry.WINE_BOTTLE.get());
             if (!player.getInventory().add(itemStack2)) {
-                player.drop(itemStack2, false);
+                player.drop(itemStack2, false, net.minecraft.util.Prediction.SERVER_ONLY);
             }
         }
 
@@ -53,7 +53,7 @@ public class GrapejuiceBottleItem extends Item {
     }
 
     public @NotNull SoundEvent getDrinkingSound() {
-        return SoundEvents.HONEY_DRINK;
+        return SoundEvents.HONEY_DRINK.value();
     }
 
     public @NotNull SoundEvent getEatingSound() {
