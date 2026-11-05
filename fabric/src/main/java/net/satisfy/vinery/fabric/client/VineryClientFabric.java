@@ -1,16 +1,8 @@
 package net.satisfy.vinery.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.satisfy.vinery.client.VineryClient;
 
-/**
- * Fabric client entrypoint for Vinery.
- * Keeps platform registration in the shared client initializer.
- */
+/** Client rendering is temporarily disabled until the 26.3 renderer migration is complete. */
 public final class VineryClientFabric implements ClientModInitializer {
-    @Override
-    public void onInitializeClient() {
-        VineryClient.preInitClient();
-        VineryClient.onInitializeClient();
-    }
+    @Override public void onInitializeClient() {}
 }
