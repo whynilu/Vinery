@@ -59,22 +59,25 @@ public class FermentationBarrelRecipe implements Recipe<FermentationBarrelRecipe
             if (wineBottle.isEmpty() || !wineBottle.is(ObjectRegistry.WINE_BOTTLE.get())) return false;
         }
 
-        StackedContents recipeMatcher = new StackedContents();
-        int matchingStacks = 0;
-
-        for (int i = 0; i < input.getIngredientSlots().size(); i++) {
-            ItemStack itemStack = input.getIngredientSlots().get(i);
-            if (!itemStack.isEmpty()) {
-                ++matchingStacks;
-                recipeMatcher.accountStack(itemStack, 1);
+        java.util.List<ItemStack> stacks = input.getIngredientSlots();
+        if (stacks.size() != this.inputs.size()) return false;
+        boolean[] used = new boolean[stacks.size()];
+        for (Ingredient ingredient : this.inputs) {
+            boolean found = false;
+            for (int i = 0; i < stacks.size(); i++) {
+                if (!used[i] && !stacks.get(i).isEmpty() && ingredient.test(stacks.get(i))) {
+                    used[i] = true;
+                    found = true;
+                    break;
+                }
             }
+            if (!found) return false;
         }
-
-        return matchingStacks == this.inputs.size() && recipeMatcher.canCraft(this, null);
+        return true;
     }
 
     @Override
-    public @NotNull ItemStack assemble(FermentationBarrelRecipeInput input, HolderLookup.Provider registryAccess) {
+    public @NotNull ItemStack assemble(FermentationBarrelRecipeInput input) {
         return this.output.copy();
     }
 
@@ -99,13 +102,33 @@ public class FermentationBarrelRecipe implements Recipe<FermentationBarrelRecipe
     }
 
     @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<FermentationBarrelRecipe> getSerializer() {
         return RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public RecipeType<FermentationBarrelRecipe> getType() {
         return RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public net.minecraft.world.item.crafting.RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
     }
 
     @Override
@@ -119,7 +142,7 @@ public class FermentationBarrelRecipe implements Recipe<FermentationBarrelRecipe
 
     public static final MapCodec<FermentationBarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Ingredient.CODEC.listOf().fieldOf("ingredients")
-                    .xmap(list -> NonNullList.of(Ingredient.EMPTY, list.toArray(new Ingredient[0])), ingredients -> ingredients)
+                    .xmap(list -> NonNullList.of(Ingredient.of(), list.toArray(new Ingredient[0])), ingredients -> ingredients)
                     .forGetter(FermentationBarrelRecipe::getInputs),
             FermentationBarrelRecipeInput.JuiceData.CODEC.fieldOf("juice").forGetter(FermentationBarrelRecipe::getJuiceData),
             ItemStack.CODEC.fieldOf("result").forGetter(recipe -> recipe.output),
