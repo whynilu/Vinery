@@ -132,7 +132,6 @@ public class CabinetBlockEntity extends RandomizableContainerBlockEntity {
         return new ChestMenu(MenuType.GENERIC_9x2, syncId, playerInventory, this, 2);
     }
 
-    @Override
     public void startOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
             this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 1.0);
