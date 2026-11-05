@@ -5,16 +5,15 @@ import net.satisfy.vinery.core.registry.GrapeTypeRegistry;
 import net.satisfy.vinery.core.wine.GrapeType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public class GrapeProperty extends Property<GrapeType> {
-    private final Set<GrapeType> values;
+    private final List<GrapeType> values;
 
     protected GrapeProperty(String name) {
         super(name, GrapeType.class);
-        this.values = GrapeTypeRegistry.GRAPE_TYPE_TYPES;
+        this.values = List.copyOf(GrapeTypeRegistry.GRAPE_TYPE_TYPES);
     }
 
     public static GrapeProperty create(String name) {
@@ -22,8 +21,10 @@ public class GrapeProperty extends Property<GrapeType> {
     }
 
     @Override
-    public @NotNull Collection<GrapeType> getPossibleValues() {
-        return this.values;
+    public int getInternalIndex(GrapeType grapeType) {
+        int index = this.values.indexOf(grapeType);
+        if (index < 0) throw new IllegalArgumentException("Unknown grape type: " + grapeType);
+        return index;
     }
 
     @Override
@@ -34,8 +35,7 @@ public class GrapeProperty extends Property<GrapeType> {
     @Override
     public @NotNull Optional<GrapeType> getValue(String string) {
         for (GrapeType grapeType : values) {
-            if (string.equals(grapeType.getSerializedName()))
-                return Optional.of(grapeType);
+            if (string.equals(grapeType.getSerializedName())) return Optional.of(grapeType);
         }
         return Optional.empty();
     }
