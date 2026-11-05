@@ -121,7 +121,7 @@ public class ApplePressMenu extends AbstractContainerMenu implements StationReci
     @Override
     public void appendRecipeBookTooltip(RecipeHolder<?> recipe, List<Component> tooltip) {
         if (recipe.value() instanceof ApplePressFermentingRecipe fermenting && fermenting.requiresBottle()) {
-            tooltip.add(Component.literal(" 1× ").append(ObjectRegistry.WINE_BOTTLE.get().getDescription()).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal(" 1× ").append(new ItemStack(ObjectRegistry.WINE_BOTTLE.get()).getHoverName()).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
