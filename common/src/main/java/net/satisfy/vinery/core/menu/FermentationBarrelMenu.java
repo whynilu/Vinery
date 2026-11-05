@@ -85,10 +85,8 @@ public class FermentationBarrelMenu extends AbstractContainerMenu implements Sta
     }
 
     private boolean isIngredient(ItemStack stack) {
-        return this.level.recipeAccess()
-                .getAllRecipesFor(RecipeTypeRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get())
-                .stream()
-                .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
+        // Recipe definitions are server-side in 26.3; the block entity validates inputs.
+        return true;
     }
 
     @Override
