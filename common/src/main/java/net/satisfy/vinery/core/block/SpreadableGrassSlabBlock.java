@@ -11,12 +11,13 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -81,21 +82,21 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, BonemealSource source) {
         if(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM) return false;
 
         return levelReader.getBlockState(blockPos.above()).isAir();
     }
 
     @Override
-    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         GrassBlock block = (GrassBlock) GRASS_BLOCK;
-        block.performBonemeal(world, random, pos, state);
+        block.performBonemeal(world, random, pos, state, source);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
     public @NotNull InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 
         if (heldItem.is(ItemTags.SHOVELS)) {
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 BlockState pathState = ObjectRegistry.DIRT_PATH_SLAB.get().defaultBlockState()
                         .setValue(TYPE, state.getValue(TYPE))
                         .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
@@ -162,13 +163,13 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
         builder.add(SNOWY);
     }
 
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    protected @NotNull BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         if (state.getValue(WATERLOGGED)) {
-            world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
         }
 
         state = state.setValue(SNOWY, world.getBlockState(pos.above()).is(BlockTags.SNOW));
 
-        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+        return super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random);
     }
 }

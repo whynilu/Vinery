@@ -34,7 +34,6 @@ import org.joml.Vector3i;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class PaleStemBlock extends StemBlock {
@@ -69,7 +68,7 @@ public class PaleStemBlock extends StemBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos blockPos, BlockState blockState, @Nullable LivingEntity livingEntity, ItemStack itemStack) {
         if (livingEntity instanceof Player player) {
-            if (itemStack != null && (player.isCreative() || itemStack.getCount() >= 2) && level.getBlockState(blockPos.below()).getBlock() != this && blockPos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(blockPos.above()).canBeReplaced()) {
+            if (itemStack != null && (player.isCreative() || itemStack.getCount() >= 2) && level.getBlockState(blockPos.below()).getBlock() != this && blockPos.getY() < level.getMaxY() - 1 && level.getBlockState(blockPos.above()).canBeReplaced()) {
                 level.setBlock(blockPos.above(), this.defaultBlockState(), 3);
                 itemStack.shrink(1);
             }
@@ -175,8 +174,7 @@ public class PaleStemBlock extends StemBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        Random rand = new Random();
-        if (rand.nextInt(100) >= 98) return;
+        if (random.nextInt(100) >= 98) return;
         if (!isMature(state) && hasTrunk(world, pos) && state.getValue(AGE) > 0) {
             final int i;
             if (world.getRawBrightness(pos, 0) >= 9 && (i = state.getValue(AGE)) < 4) {
@@ -192,11 +190,11 @@ public class PaleStemBlock extends StemBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+    protected @NotNull BlockState updateShape(BlockState state, LevelReader world, net.minecraft.world.level.ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         if (!state.canSurvive(world, pos)) {
-            world.scheduleTick(pos, this, 1);
+            ticks.scheduleTick(pos, this, 1);
         }
-        return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+        return super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random);
     }
 
     @Override

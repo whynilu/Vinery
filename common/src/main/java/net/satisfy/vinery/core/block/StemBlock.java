@@ -23,7 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.satisfy.vinery.core.registry.GrapeTypeRegistry;
 import net.satisfy.vinery.core.util.GeneralUtil;
 import net.satisfy.vinery.core.block.state.properties.GrapeProperty;
-import net.satisfy.vinery.core.util.GrapeType;
+import net.satisfy.vinery.core.wine.GrapeType;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class StemBlock extends Block implements BonemealableBlock {
@@ -80,9 +80,9 @@ public abstract class StemBlock extends Block implements BonemealableBlock {
         return world.getBlockState(pos.below()).getBlock() == this;
     }
 
-    private void boneMealGrow(Level world, BlockState state, BlockPos pos) {
+    private void boneMealGrow(ServerLevel world, BlockState state, BlockPos pos, RandomSource random) {
         int j;
-        int age = state.getValue(AGE) + Mth.nextInt(world.getRandom(), 1, 2);
+        int age = state.getValue(AGE) + Mth.nextInt(random, 1, 2);
         if (age > (j = 4)) {
             age = j;
         }
@@ -104,17 +104,17 @@ public abstract class StemBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState state, net.minecraft.world.level.block.BonemealSource source) {
         return !isMature(state) && levelReader.getBlockState(blockPos.below()).getBlock() == this && state.getValue(AGE) > 0;
     }
     @Override
-    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state, net.minecraft.world.level.block.BonemealSource source) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        boneMealGrow(world, state, pos);
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state, net.minecraft.world.level.block.BonemealSource source) {
+        boneMealGrow(world, state, pos, random);
     }
 
     public BlockState withAge(BlockState state, int age, GrapeType type) {

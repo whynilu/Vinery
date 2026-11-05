@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
-import net.minecraft.world.ticks.ScheduledTickAccess;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;

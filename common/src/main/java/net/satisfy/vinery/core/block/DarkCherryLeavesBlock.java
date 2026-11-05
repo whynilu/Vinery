@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
-import net.minecraft.world.ticks.ScheduledTickAccess;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -115,7 +115,7 @@ public class DarkCherryLeavesBlock extends LeavesBlock implements BonemealableBl
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, BonemealSource source) {
         int age = state.getValue(AGE);
         boolean has = state.getValue(HAS_CHERRIES);
         return (age < 2 && !has) || (age == 2 && has);
