@@ -57,6 +57,7 @@ public final class PlatformHelperImpl extends PlatformHelper {
         };
     }
 
+    public static int getWineStartDuration() { return config().wine.startDuration; }
     public static int getWineDurationPerYear() { return config().wine.durationPerYear; }
     public static int getWineDaysPerYear() { return config().wine.daysPerYear; }
     public static int getWineYearsPerEffectLevel() { return config().wine.yearsPerEffectLevel; }
