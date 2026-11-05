@@ -31,15 +31,6 @@ allprojects {
         exclusiveContent {
             forRepository {
                 maven {
-                    name = 'LetsDoMaven'
-                    url = 'https://raw.githubusercontent.com/Let-s-Do-Collection/Foundation/1.21.1/maven'
-                }
-            }
-            filter { includeGroup 'net.satisfy.foundation' }
-        }
-        exclusiveContent {
-            forRepository {
-                maven {
                     name = 'Modrinth'
                     url = 'https://api.modrinth.com/maven'
                 }
