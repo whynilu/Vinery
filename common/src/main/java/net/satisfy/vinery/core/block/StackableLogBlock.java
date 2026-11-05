@@ -11,14 +11,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ShovelItem;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -58,13 +58,13 @@ public class StackableLogBlock extends SlabBlock {
     }
 
     @Override
-    public @NotNull ItemInteractionResult useItemOn(ItemStack stack,BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult useItemOn(ItemStack stack,BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         final SlabType stackSize = state.getValue(TYPE);
         if (stack.is(Items.FLINT_AND_STEEL) && stackSize == SlabType.DOUBLE) {
             world.setBlock(pos, state.setValue(FIRED, true), Block.UPDATE_ALL);
             world.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.NEUTRAL, 1.0F, 1.0F);
-            return ItemInteractionResult.SUCCESS;
-        } else if (stack.getItem() instanceof ShovelItem && stackSize == SlabType.DOUBLE && state.getValue(FIRED)) {
+            return InteractionResult.SUCCESS;
+        } else if (stack.getItem() is(ItemTags.SHOVELS) && stackSize == SlabType.DOUBLE && state.getValue(FIRED)) {
             world.setBlockAndUpdate(pos, state.setValue(FIRED, false));
             world.playSound(player, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
             final boolean clientSide = world.isClientSide();
@@ -73,9 +73,9 @@ public class StackableLogBlock extends SlabBlock {
                     CampfireBlock.makeParticles(world, pos, false, false);
                 }
             }
-            return ItemInteractionResult.sidedSuccess(clientSide);
+            return InteractionResult.sidedSuccess(clientSide);
         } else {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
     }
 
