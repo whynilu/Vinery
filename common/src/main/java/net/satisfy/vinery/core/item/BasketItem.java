@@ -12,6 +12,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import java.util.List;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +44,11 @@ public class BasketItem extends BlockItem {
                 .filter(Objects::nonNull)
                 .map(Tag.class::cast)
                 .map(CompoundTag.class::cast)
-                .map(tag -> ItemStack.parse(provider, tag).orElse(ItemStack.EMPTY));
+                .map(tag -> ItemStackTemplate.MAP_CODEC.codec()
+                        .parse(provider.createSerializationContext(NbtOps.INSTANCE), tag)
+                        .result()
+                        .map(ItemStackTemplate::create)
+                        .orElse(ItemStack.EMPTY));
     }
 
     public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack itemStack,HolderLookup.Provider provider) {
@@ -50,7 +58,7 @@ public class BasketItem extends BlockItem {
         var10000.forEach(nonNullList::add);
         List<ItemStackTemplate> templates = nonNullList.stream()
                 .filter(stack -> !stack.isEmpty())
-                .map(stack -> new ItemStackTemplate(stack.getItemHolder(), stack.getCount(), stack.getComponentsPatch()))
+                .map(stack -> new ItemStackTemplate(BuiltInRegistries.ITEM.wrapAsHolder(stack.getItem()), stack.getCount(), stack.getComponentsPatch()))
                 .toList();
         return Optional.of(new BundleTooltip(new BundleContents(templates)));
     }
