@@ -54,7 +54,7 @@ public class DarkCherryBoatItem extends BoatItem {
             }
 
             if (hitresult.getType() == HitResult.Type.BLOCK) {
-                Boat boat = this.getBoat(pLevel, hitresult);
+                Entity boat = this.getBoat(pLevel, hitresult);
                 if(boat instanceof DarkCherryChestBoatEntity chestBoat) {
                     chestBoat.setWoodType(this.type);
                 } else if(boat instanceof DarkCherryBoatEntity) {
@@ -64,7 +64,7 @@ public class DarkCherryBoatItem extends BoatItem {
                 if (!pLevel.noCollision(boat, boat.getBoundingBox())) {
                     return InteractionResult.FAIL;
                 } else {
-                    if (!pLevel.isClientSide) {
+                    if (!pLevel.isClientSide()) {
                         pLevel.addFreshEntity(boat);
                         pLevel.gameEvent(pPlayer, GameEvent.ENTITY_PLACE, hitresult.getLocation());
                         if (!pPlayer.getAbilities().instabuild) {
@@ -81,7 +81,7 @@ public class DarkCherryBoatItem extends BoatItem {
         }
     }
 
-    private Boat getBoat(Level level, HitResult hitResult) {
+    private Entity getBoat(Level level, HitResult hitResult) {
         return this.hasChest ? new DarkCherryChestBoatEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z) : new DarkCherryBoatEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
     }
 }

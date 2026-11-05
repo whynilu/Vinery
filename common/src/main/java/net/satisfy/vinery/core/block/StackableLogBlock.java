@@ -49,7 +49,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("deprecation, unused")
 public class StackableLogBlock extends SlabBlock {
     public static final BooleanProperty FIRED = BooleanProperty.create("fired");
-    public static final EnumProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
 
     public StackableLogBlock(Properties settings) {
@@ -73,7 +73,7 @@ public class StackableLogBlock extends SlabBlock {
                     CampfireBlock.makeParticles(world, pos, false, false);
                 }
             }
-            return InteractionResult.sidedSuccess(clientSide);
+            return clientSide ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         } else {
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
@@ -131,8 +131,8 @@ public class StackableLogBlock extends SlabBlock {
         {
             Holder<Enchantment> frostWalker = livingEntity.level()
                     .registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT)
-                    .getHolderOrThrow(Enchantments.FROST_WALKER);
+                    .lookupOrThrow(Registries.ENCHANTMENT)
+                    .getOrThrow(Enchantments.FROST_WALKER);
             if(livingEntity.getItemBySlot(EquipmentSlot.FEET).getEnchantments().getLevel(frostWalker) < 0){
                 entity.hurt(world.damageSources().inFire(), 1.f);
             }

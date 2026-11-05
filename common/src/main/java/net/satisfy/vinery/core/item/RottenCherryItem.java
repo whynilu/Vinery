@@ -18,20 +18,4 @@ public class RottenCherryItem extends SnowballItem {
         super(settings);
     }
 
-    @Override
-    public @NotNull InteractionResult use(Level level, Player user, InteractionHand hand) {
-        ItemStack itemStack = user.getItemInHand(hand);
-        level.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
-        if (!level.isClientSide) {
-            Snowball snowballEntity = new Snowball(level, user);
-            snowballEntity.setItem(itemStack);
-            snowballEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
-            level.addFreshEntity(snowballEntity);
-        }
-        user.awardStat(Stats.ITEM_USED.get(this));
-        if (!user.getAbilities().instabuild) {
-            itemStack.shrink(1);
-        }
-        return InteractionResult.SUCCESS;
-    }
 }
