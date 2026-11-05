@@ -11,7 +11,6 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.resources.ResourceLocation;
 import net.satisfy.vinery.core.Vinery;
 import net.satisfy.vinery.fabric.config.VineryFabricConfig;
-import net.satisfy.vinery.fabric.core.registry.VineryFabricVillagers;
 import net.satisfy.vinery.fabric.core.world.VineryBiomeModification;
 
 import java.util.Optional;
@@ -20,13 +19,11 @@ public class VineryFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         AutoConfig.register(VineryFabricConfig.class, GsonConfigSerializer::new);
-        VineryFabricVillagers.registerPOIAndProfession();
 
         Vinery.init();
         VineryBiomeModification.init();
         Vinery.commonSetup();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(VineryFabricVillagers::init);
 
         Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(Vinery.MOD_ID);
         modContainer.ifPresent(container -> ResourceManagerHelper.registerBuiltinResourcePack(
