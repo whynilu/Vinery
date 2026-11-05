@@ -34,7 +34,7 @@ public class DirtSlabBlock extends SlabBlock {
                         .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
 
                 world.setBlock(pos, pathState, Block.UPDATE_ALL);
-                world.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                world.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
 
                 if (!player.isCreative()) {
                     heldItem.hurtAndBreak(1,player, EquipmentSlot.OFFHAND);

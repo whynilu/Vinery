@@ -47,7 +47,7 @@ public class GrapeVineBlock extends VineBlock implements BonemealableBlock {
             return super.useItemOn(stack,state, world, pos, player, hand, hit);
         }
         if (player.getItemInHand(hand).is(Items.SHEARS)) {
-            world.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+            world.playSound(player, pos, SoundEvents.AXE_STRIP.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
             world.setBlockAndUpdate(pos, state.cycle(STERILIZED));
             return InteractionResult.PASS;
         }
