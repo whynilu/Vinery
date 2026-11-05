@@ -130,7 +130,7 @@ public class DrinkBlockItem extends BlockItem {
 
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
-        if (!level.isClientSide && effectSupplier != null) {
+        if (!level.isClientSide()() && effectSupplier != null) {
             if (itemStack.get(DataComponentRegistry.WINE_YEAR.get()) == null) {
                 WineYears.setWineYear(itemStack, level);
             }
@@ -141,9 +141,7 @@ public class DrinkBlockItem extends BlockItem {
             Holder<MobEffect> effectHolder = effectSupplier.get();
             MobEffect effect = effectHolder.value();
 
-            Holder<MobEffect> registryHolder = level.registryAccess()
-                    .registryOrThrow(Registries.MOB_EFFECT)
-                    .wrapAsHolder(effect);
+            Holder<MobEffect> registryHolder = effectSupplier.get();
 
             livingEntity.addEffect(new MobEffectInstance(registryHolder, duration, amplifier));
         }
