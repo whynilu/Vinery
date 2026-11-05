@@ -21,6 +21,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -107,7 +108,7 @@ public class GeneralUtil {
 
         BlockPos hitPos = hit.getBlockPos();
         if (!GeneralUtil.isOccupied(world, hitPos) && player.getItemInHand(hand).isEmpty()) {
-            ChairEntity chair = EntityTypeRegistry.CHAIR.get().create(world);
+            ChairEntity chair = EntityTypeRegistry.CHAIR.get().create(world, EntitySpawnReason.TRIGGERED);
             if (chair == null) return InteractionResult.PASS;
 
             BlockState s = world.getBlockState(hitPos);
