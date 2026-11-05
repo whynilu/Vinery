@@ -1,7 +1,5 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -19,6 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -39,10 +38,6 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     private static final VoxelShape SHAPE;
 
     public final GrapeType type;
-    public static final MapCodec<GrapeBushBlock> CODEC = RecordCodecBuilder.mapCodec(inst-> inst.group(
-            BlockBehaviour.propertiesCodec(),
-            GrapeType.CODEC.fieldOf("type").forGetter(GrapeBushBlock::grapeType)
-    ).apply(inst,GrapeBushBlock::new));
     public GrapeBushBlock(Properties settings, GrapeType type) {
         super(settings);
         this.type = type;
@@ -59,22 +54,22 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    protected ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean includeData) {
         return new ItemStack(this.grapeType().getSeeds());
     }
 
     @Override
-    public @NotNull InteractionResult useItemOn(ItemStack stack,BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    protected @NotNull InteractionResult useItemOn(ItemStack stack,BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(AGE);
         boolean bl = i == 3;
         if (!bl && stack.is(Items.BONE_MEAL)) {
-            return ItemInteractionResult.TRY_WITH_EMPTY_HAND;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         } else if (i > 1) {
             int x = level.getRandom().nextInt(2);
             popResource(level, pos, new ItemStack(getGrapeType().getItem(), x + (bl ? 1 : 0)));
             level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.getRandom().nextFloat() * 0.4F);
             level.setBlock(pos, state.setValue(AGE, 1), 2);
-            return ItemInteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         } else {
             return super.useItemOn(stack,state, level, pos, player, hand, hit);
         }
@@ -97,12 +92,12 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, BonemealSource source) {
         return blockState.getValue(AGE) < 3;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         return true;
     }
 
@@ -139,7 +134,7 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         int i = Math.min(3, state.getValue(AGE) + 1);
         level.setBlock(pos, state.setValue(AGE, i), 2);
     }
