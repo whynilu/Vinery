@@ -79,7 +79,11 @@ public class WineYears {
                 startDuration,
                 durationPerYear,
                 maxDuration,
-                maxLevel
+                maxLevel,
+                0,
+                -1,
+                0,
+                100
         ));
     }
 
