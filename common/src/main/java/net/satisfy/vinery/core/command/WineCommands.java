@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.satisfy.foundation.storage.StorageBlockEntity;
+import net.satisfy.vinery.core.block.entity.StorageBlockEntity;
 import net.satisfy.vinery.core.block.entity.FermentationBarrelBlockEntity;
 import net.satisfy.vinery.core.component.WineYearComponent;
 import net.satisfy.vinery.core.item.DrinkBlockItem;
