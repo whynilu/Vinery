@@ -127,9 +127,9 @@ public class CompletionistBannerBlock extends BaseEntityBlock {
             tooltip.accept(Component.translatable("tooltip.vinery.banner.thankyou_1").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
             tooltip.accept(Component.empty());
             tooltip.accept(Component.translatable("tooltip.vinery.banner.thankyou_2").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
-            tooltip.add(Component.translatable("tooltip.vinery.banner.thankyou_4").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
-            tooltip.add(Component.empty());
-            tooltip.add(Component.translatable("tooltip.vinery.banner.thankyou_3").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
+            tooltip.accept(Component.translatable("tooltip.vinery.banner.thankyou_4").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
+            tooltip.accept(Component.empty());
+            tooltip.accept(Component.translatable("tooltip.vinery.banner.thankyou_3").withStyle(style -> style.withColor(TextColor.fromRgb(0x513A8B))));
         }
     }
 }

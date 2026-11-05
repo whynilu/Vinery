@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.satisfy.vinery.core.components.WineYearComponent;
+import net.satisfy.vinery.core.component.WineYearComponent;
 import net.satisfy.vinery.core.registry.DataComponentRegistry;
 import net.satisfy.vinery.platform.PlatformHelper;
 
