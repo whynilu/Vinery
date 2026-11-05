@@ -1,6 +1,7 @@
 package net.satisfy.vinery.core.block.entity;
 
 import net.minecraft.core.*;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
@@ -160,6 +161,7 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
 
     public static void tick(Level world, BlockPos pos, FermentationBarrelBlockEntity blockEntity) {
         if (world.isClientSide()) return;
+        ServerLevel serverWorld = (ServerLevel) world;
 
         if (blockEntity.fluidLevel == 0) {
             blockEntity.setJuiceType("");
@@ -181,7 +183,7 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
                 new FermentationBarrelRecipeInput.JuiceData(blockEntity.juiceType, blockEntity.fluidLevel)
         );
 
-        var recipeHolder = world.recipeAccess()
+        var recipeHolder = serverWorld.recipeAccess()
                 .getRecipeFor(RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get(), input, world);
 
         if (recipeHolder.isEmpty()) {
@@ -415,7 +417,7 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
     private boolean isIngredient(ItemStack stack) {
         if (level == null) return false;
         return level.getRecipeManager()
-                .getAllRecipesFor(RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get())
+                .byType(RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get())
                 .stream()
                 .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
     }
