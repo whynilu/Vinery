@@ -114,7 +114,8 @@ public class GeneralUtil {
             float yaw = 0.0F;
             for (var p : s.getProperties()) {
                 if (p.getName().equals("facing") && p instanceof EnumProperty<?> dp) {
-                    yaw = s.getValue(dp).toYRot();
+                    Object facing = s.getValue(dp);
+                    if (facing instanceof Direction direction) yaw = direction.toYRot();
                     break;
                 }
             }
