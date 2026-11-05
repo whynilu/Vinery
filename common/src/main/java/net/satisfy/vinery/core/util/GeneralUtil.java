@@ -79,7 +79,7 @@ public class GeneralUtil {
 
     public static Collection<ServerPlayer> tracking(ServerLevel world, BlockPos pos) {
         Objects.requireNonNull(pos, "BlockPos cannot be null");
-        return tracking(world, new ChunkPos(pos));
+        return tracking(world, new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4));
     }
 
     public static BlockPos getPreviousPlayerPosition(Player player, ChairEntity chairEntity) {
@@ -159,7 +159,7 @@ public class GeneralUtil {
     }
 
     private static Identifier getDimensionTypeId(Level world) {
-        return world.dimension().location();
+        return world.dimension().identifier();
     }
 
     public static void onStateReplaced(Level world, BlockPos pos) {
@@ -207,8 +207,8 @@ public class GeneralUtil {
 
     public static void popResourceFromFace(Level level, BlockPos blockPos, Direction side, ItemStack itemStack) {
         BlockState blockState = level.getBlockState(blockPos);
-        double itemWidth = EntityType.ITEM.getWidth();
-        double itemHeight = EntityType.ITEM.getHeight();
+        double itemWidth = 0.25;
+        double itemHeight = 0.25;
         VoxelShape shape = blockState.getCollisionShape(level, blockPos);
         double posX = (double)blockPos.getX() + 0.5;
         double posY = (double)blockPos.getY() + 0.5;
@@ -251,7 +251,7 @@ public class GeneralUtil {
     }
 
     private static void popResource(Level level, ItemEntity itemEntity, ItemStack itemStack) {
-        if (!level.isClientSide() && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.BLOCK_DROPS)) {
+        if (level instanceof ServerLevel serverLevel && !itemStack.isEmpty() && serverLevel.getGameRules().getBoolean(GameRules.BLOCK_DROPS)) {
             itemEntity.setDefaultPickUpDelay();
             level.addFreshEntity(itemEntity);
         }
@@ -337,7 +337,7 @@ public class GeneralUtil {
                 if (!((Player)entity).getAbilities().instabuild) {
                     ItemStack itemStack2 = new ItemStack(returnItem);
                     if (!player.getInventory().add(itemStack2)) {
-                        player.drop(itemStack2, false);
+                        player.drop(itemStack2, false, false);
                     }
                 }
             }
