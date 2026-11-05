@@ -74,7 +74,8 @@ public final class PlatformHelperImpl extends PlatformHelper {
     }
 
     public static boolean reloadConfig() {
-        return false;
+        AutoConfig.getConfigHolder(VineryFabricConfig.class).load();
+        return true;
     }
 
     public static List<VineryPlugin> getPlugins() {
