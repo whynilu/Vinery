@@ -44,7 +44,7 @@ public class ApplePressFermentingRecipe implements Recipe<ApplePressFermentingRe
     }
 
     @Override
-    public @NotNull ItemStack assemble(ApplePressFermentingRecipeInput container, HolderLookup.Provider registryAccess) {
+    public @NotNull ItemStack assemble(ApplePressFermentingRecipeInput container) {
         return this.output.copy();
     }
 
@@ -78,13 +78,33 @@ public class ApplePressFermentingRecipe implements Recipe<ApplePressFermentingRe
     }
 
     @Override
-    public @NotNull RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<ApplePressFermentingRecipe> getSerializer() {
         return RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_SERIALIZER.get();
     }
 
     @Override
-    public @NotNull RecipeType<?> getType() {
+    public RecipeType<ApplePressFermentingRecipe> getType() {
         return RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get();
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public net.minecraft.world.item.crafting.RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
     }
 
     @Override
