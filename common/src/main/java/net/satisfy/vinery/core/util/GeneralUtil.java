@@ -304,9 +304,9 @@ public class GeneralUtil {
 
         return switch (effectiveDirection) {
             case NORTH -> Optional.of(Pair.of(1.0f - x, y));
-            case SOUTH -> Optional.of(new Tuple<>(x, y));
-            case WEST -> Optional.of(new Tuple<>(z, y));
-            case EAST -> Optional.of(new Tuple<>(1.0f - z, y));
+            case SOUTH -> Optional.of(Pair.of(x, y));
+            case WEST -> Optional.of(Pair.of(z, y));
+            case EAST -> Optional.of(Pair.of(1.0f - z, y));
             default -> Optional.empty();
         };
     }
