@@ -13,7 +13,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.satisfy.vinery.core.recipe.ApplePressFermentingRecipe;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
-import net.satisfy.foundation.recipe.book.StationRecipeBookMenu;
 import net.satisfy.vinery.core.registry.RecipeTypeRegistry;
 import net.satisfy.vinery.core.registry.MenuTypeRegistry;
 import org.jetbrains.annotations.NotNull;
