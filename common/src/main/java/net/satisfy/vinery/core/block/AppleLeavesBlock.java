@@ -15,11 +15,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.BonemealSource;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
+import net.minecraft.world.ticks.ScheduledTickAccess;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -36,7 +38,7 @@ public class AppleLeavesBlock extends LeavesBlock implements BonemealableBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 3);
 
     public AppleLeavesBlock(Properties settings) {
-        super(settings);
+        super(AmbientLeavesBlockSoundPlayer.noAmbientSound(), settings);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(PERSISTENT, true)
                 .setValue(DISTANCE, 7)
@@ -72,7 +74,7 @@ public class AppleLeavesBlock extends LeavesBlock implements BonemealableBlock {
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
-        boolean canGrowApples = ctx.getLevel().random.nextFloat() < 0.3f;
+        boolean canGrowApples = ctx.getLevel().getRandom().nextFloat() < 0.3f;
         return updateDistance(this.defaultBlockState()
                 .setValue(PERSISTENT, true)
                 .setValue(CAN_GROW_APPLES, canGrowApples)
@@ -112,19 +114,19 @@ public class AppleLeavesBlock extends LeavesBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState state) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState state, BonemealSource source) {
         int age = state.getValue(AGE);
         boolean has = state.getValue(HAS_APPLES);
         return (age < 2 && !has) || (age == 2 && has);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         BlockState s = state;
         if (!s.getValue(CAN_GROW_APPLES)) {
             s = s.setValue(CAN_GROW_APPLES, true);
@@ -144,15 +146,15 @@ public class AppleLeavesBlock extends LeavesBlock implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
-        return updateDistance(state, world, pos);
+    protected @NotNull BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction directionToNeighbour, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
+        return updateDistance(super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random), level, pos);
     }
 
     private static int getDistanceAt(BlockState neighborState) {
         return neighborState.getBlock() instanceof LeavesBlock ? neighborState.getValue(DISTANCE) : (neighborState.is(BlockTags.LOGS) ? 0 : 7);
     }
 
-    private BlockState updateDistance(BlockState state, LevelAccessor world, BlockPos pos) {
+    private BlockState updateDistance(BlockState state, LevelReader world, BlockPos pos) {
         int minDistance = 7;
         for (Direction dir : Direction.values()) {
             BlockState neighbor = world.getBlockState(pos.relative(dir));
