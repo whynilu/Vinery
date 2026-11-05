@@ -73,7 +73,6 @@ public class DrinkBlockItem extends BlockItem {
         return blockState != null && this.canPlace(context, blockState) ? blockState : null;
     }
 
-    @Override
     public void appendHoverText(ItemStack stack, TooltipContext tooltipContext, List<Component> tooltip, TooltipFlag tooltipFlag) {
         Level world = null;
         if (tooltipContext.registries() != null) {
