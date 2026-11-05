@@ -1,11 +1,7 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
@@ -17,6 +13,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -36,12 +34,6 @@ public class CabinetBlock extends BaseEntityBlock {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     private final SoundEvent openSound;
     private final SoundEvent closeSound;
-    public static final MapCodec<CabinetBlock> CODEC = RecordCodecBuilder.mapCodec(inst->inst.group(
-            Properties.CODEC.fieldOf("settings").forGetter(CabinetBlock::properties),
-            SoundEvent.DIRECT_CODEC.fieldOf("openSound").forGetter(CabinetBlock::getOpenSound),
-            SoundEvent.DIRECT_CODEC.fieldOf("closeSound").forGetter(CabinetBlock::getCloseSound)
-    ).apply(inst,CabinetBlock::new));
-
     public CabinetBlock(BlockBehaviour.Properties settings, SoundEvent openSound, SoundEvent closeSound) {
         super(settings);
         this.openSound = openSound;
@@ -86,25 +78,13 @@ public class CabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
     public @NotNull RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof net.minecraft.world.Container container) {
-                net.minecraft.world.Containers.dropContents(world, pos, container);
-                world.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, world, pos, newState, moved);
-        }
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        Containers.updateNeighboursAfterDestroy(state, level, pos);
     }
 
     @Override
@@ -123,7 +103,7 @@ public class CabinetBlock extends BaseEntityBlock {
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level world, BlockPos pos, Direction direction) {
         return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(world.getBlockEntity(pos));
     }
 
