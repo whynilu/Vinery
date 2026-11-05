@@ -99,17 +99,12 @@ public abstract class StorageBlock extends FacingBlock implements EntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock())) {
-            BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof StorageBlockEntity shelf) {
-                if (world instanceof ServerLevel) {
-                    Containers.dropContents(world, pos, shelf.getInventory());
-                }
-                world.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, world, pos, newState, moved);
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof StorageBlockEntity shelf) {
+            Containers.dropContents(level, pos, shelf.getInventory());
         }
+        Containers.updateNeighboursAfterDestroy(state, level, pos);
     }
 
     @Override
