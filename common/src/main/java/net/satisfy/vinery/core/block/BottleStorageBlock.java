@@ -1,7 +1,7 @@
 package net.satisfy.vinery.core.block;
 
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.satisfy.foundation.storage.StorageBlock;
@@ -33,7 +33,7 @@ public class BottleStorageBlock extends StorageBlock {
     }
 
     @Override
-    public ResourceLocation type() {
+    public Identifier type() {
         return layout.type;
     }
 
@@ -72,11 +72,11 @@ public class BottleStorageBlock extends StorageBlock {
             }
         };
 
-        public final ResourceLocation type;
+        public final Identifier type;
 
         public final float[][] offsets;
 
-        Layout(ResourceLocation type, float[][] offsets) {
+        Layout(Identifier type, float[][] offsets) {
             this.type = type;
             this.offsets = offsets;
         }
