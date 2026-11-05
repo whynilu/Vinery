@@ -252,7 +252,7 @@ public class GeneralUtil {
     }
 
     private static void popResource(Level level, ItemEntity itemEntity, ItemStack itemStack) {
-        if (level instanceof ServerLevel serverLevel && !itemStack.isEmpty() && serverLevel.getGameRules().getBoolean(GameRules.BLOCK_DROPS)) {
+        if (level instanceof ServerLevel serverLevel && !itemStack.isEmpty() && serverLevel.getGameRules().get(GameRules.BLOCK_DROPS)) {
             itemEntity.setDefaultPickUpDelay();
             level.addFreshEntity(itemEntity);
         }
@@ -338,7 +338,7 @@ public class GeneralUtil {
                 if (!((Player)entity).getAbilities().instabuild) {
                     ItemStack itemStack2 = new ItemStack(returnItem);
                     if (!player.getInventory().add(itemStack2)) {
-                        player.drop(itemStack2, false, false);
+                        player.drop(itemStack2, false, net.minecraft.world.entity.item.ItemEntity.SpawnReason.DROP);
                     }
                 }
             }
