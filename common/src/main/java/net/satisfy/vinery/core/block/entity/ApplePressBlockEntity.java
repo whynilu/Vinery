@@ -131,10 +131,10 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
         if (hasInput(entity, 0)) {
             ApplePressMashingRecipeInput input = new ApplePressMashingRecipeInput(entity.getItem(0));
-            if(world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(),input,world).isEmpty()) {
+            if(serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(), input, serverWorld).isEmpty()) {
                 return;
             }
-            Recipe<?> recipe1 = world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(),input,serverWorld).get().value();
+            Recipe<?> recipe1 = serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(), input, serverWorld).get().value();
             if (recipe1 instanceof ApplePressMashingRecipe mashingRecipe) {
                 if (canProcessMashing(entity, mashingRecipe)) {
                     entity.progress1++;
@@ -154,8 +154,8 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
         if (hasInput(entity, 1)) {
             ApplePressFermentingRecipeInput input = new ApplePressFermentingRecipeInput(entity.getItem(1));
-            if(world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, world).isEmpty()) return;
-            Recipe<?> recipe2 = world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, world).get().value();
+            if(serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, serverWorld).isEmpty()) return;
+            Recipe<?> recipe2 = serverWorld.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), input, serverWorld).get().value();
             if (recipe2 instanceof ApplePressFermentingRecipe fermentingRecipe) {
                 if (canProcessFermenting(entity, fermentingRecipe)) {
                     entity.progress2++;
@@ -272,17 +272,11 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
     private boolean isValidForApplePressMashing(ItemStack stack) {
         if (!(level instanceof ServerLevel serverLevel)) return false;
-        return serverLevel.recipeAccess().recipeMap()
-                .byType(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get())
-                .stream()
-                .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
+        return serverLevel.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(), new ApplePressMashingRecipeInput(stack), serverLevel).isPresent();
     }
 
     private boolean isValidForApplePressFermenting(ItemStack stack) {
         if (!(level instanceof ServerLevel serverLevel)) return false;
-        return serverLevel.recipeAccess().recipeMap()
-                .byType(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get())
-                .stream()
-                .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
+        return serverLevel.recipeAccess().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get(), new ApplePressFermentingRecipeInput(stack), serverLevel).isPresent();
     }
 }
