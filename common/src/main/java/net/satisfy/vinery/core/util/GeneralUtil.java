@@ -338,7 +338,7 @@ public class GeneralUtil {
                 if (!((Player)entity).getAbilities().instabuild) {
                     ItemStack itemStack2 = new ItemStack(returnItem);
                     if (!player.getInventory().add(itemStack2)) {
-                        player.drop(itemStack2, false, net.minecraft.world.entity.item.ItemEntity.SpawnReason.DROP);
+                        player.drop(itemStack2, false);
                     }
                 }
             }
