@@ -21,7 +21,6 @@ public class BottleStorageBlock extends StorageBlock {
         return stack.is(TagRegistry.SMALL_BOTTLE);
     }
 
-    @Override
     public BlockEntityType<?> blockEntityType() {
         return EntityTypeRegistry.STORAGE_ENTITY.get();
     }
