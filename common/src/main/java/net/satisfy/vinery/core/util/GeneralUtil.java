@@ -12,7 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -54,23 +54,23 @@ import java.util.function.Supplier;
 
 public class GeneralUtil {
     public static final EnumProperty<LineConnectingType> LINE_CONNECTING_TYPE = EnumProperty.create("type", LineConnectingType.class);
-    private static final Map<ResourceLocation, Map<BlockPos, Pair<ChairEntity, BlockPos>>> CHAIRS = new HashMap<>();
+    private static final Map<Identifier, Map<BlockPos, Pair<ChairEntity, BlockPos>>> CHAIRS = new HashMap<>();
 
     public static RotatedPillarBlock logBlock() {
         return new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG));
     }
 
-    public static <T extends Block> RegistrySupplier<T> registerWithItem(DeferredRegister<Block> registerB, Registrar<Block> registrarB, DeferredRegister<Item> registerI, Registrar<Item> registrarI, ResourceLocation name, Supplier<T> block) {
+    public static <T extends Block> RegistrySupplier<T> registerWithItem(DeferredRegister<Block> registerB, Registrar<Block> registrarB, DeferredRegister<Item> registerI, Registrar<Item> registrarI, Identifier name, Supplier<T> block) {
         RegistrySupplier<T> toReturn = registerWithoutItem(registerB, registrarB, name, block);
         registerItem(registerI, registrarI, name, () -> new BlockItem(toReturn.get(), new Item.Properties()));
         return toReturn;
     }
 
-    public static <T extends Block> RegistrySupplier<T> registerWithoutItem(DeferredRegister<Block> register, Registrar<Block> registrar, ResourceLocation path, Supplier<T> block) {
+    public static <T extends Block> RegistrySupplier<T> registerWithoutItem(DeferredRegister<Block> register, Registrar<Block> registrar, Identifier path, Supplier<T> block) {
         return Platform.isNeoForge() ? register.register(path.getPath(), block) : registrar.register(path, block);
     }
 
-    public static <T extends Item> RegistrySupplier<T> registerItem(DeferredRegister<Item> register, Registrar<Item> registrar, ResourceLocation path, Supplier<T> itemSupplier) {
+    public static <T extends Item> RegistrySupplier<T> registerItem(DeferredRegister<Item> register, Registrar<Item> registrar, Identifier path, Supplier<T> itemSupplier) {
         return Platform.isNeoForge() ? register.register(path.getPath(), itemSupplier) : registrar.register(path, itemSupplier);
     }
 
@@ -87,7 +87,7 @@ public class GeneralUtil {
 
     public static BlockPos getPreviousPlayerPosition(Player player, ChairEntity chairEntity) {
         if (!player.level().isClientSide()) {
-            ResourceLocation id = getDimensionTypeId(player.level());
+            Identifier id = getDimensionTypeId(player.level());
             if (CHAIRS.containsKey(id)) {
 
                 for (Object object : ((Map) CHAIRS.get(id)).values()) {
@@ -146,12 +146,12 @@ public class GeneralUtil {
     }
 
     public static boolean isOccupied(Level world, BlockPos pos) {
-        ResourceLocation id = getDimensionTypeId(world);
+        Identifier id = getDimensionTypeId(world);
         return GeneralUtil.CHAIRS.containsKey(id) && GeneralUtil.CHAIRS.get(id).containsKey(pos);
     }
 
     public static boolean isPlayerSitting(Player player) {
-        for (ResourceLocation i : CHAIRS.keySet()) {
+        for (Identifier i : CHAIRS.keySet()) {
             for (Pair<ChairEntity, BlockPos> pair : CHAIRS.get(i).values()) {
                 if (pair.getFirst().hasPassenger(player))
                     return true;
@@ -160,7 +160,7 @@ public class GeneralUtil {
         return false;
     }
 
-    private static ResourceLocation getDimensionTypeId(Level world) {
+    private static Identifier getDimensionTypeId(Level world) {
         return world.dimension().location();
     }
 
@@ -176,7 +176,7 @@ public class GeneralUtil {
 
     public static boolean addChairEntity(Level world, BlockPos blockPos, ChairEntity entity, BlockPos playerPos) {
         if (!world.isClientSide) {
-            ResourceLocation id = getDimensionTypeId(world);
+            Identifier id = getDimensionTypeId(world);
             if (!CHAIRS.containsKey(id)) CHAIRS.put(id, new HashMap<>());
             CHAIRS.get(id).put(blockPos, Pair.of(entity, playerPos));
             return true;
@@ -186,7 +186,7 @@ public class GeneralUtil {
 
     public static void removeChairEntity(Level world, BlockPos pos) {
         if (!world.isClientSide) {
-            ResourceLocation id = getDimensionTypeId(world);
+            Identifier id = getDimensionTypeId(world);
             if (CHAIRS.containsKey(id)) {
                 CHAIRS.get(id).remove(pos);
             }
@@ -195,7 +195,7 @@ public class GeneralUtil {
 
     public static ChairEntity getChairEntity(Level world, BlockPos pos) {
         if (!world.isClientSide()) {
-            ResourceLocation id = getDimensionTypeId(world);
+            Identifier id = getDimensionTypeId(world);
             if (CHAIRS.containsKey(id) && CHAIRS.get(id).containsKey(pos))
                 return CHAIRS.get(id).get(pos).getFirst();
         }
