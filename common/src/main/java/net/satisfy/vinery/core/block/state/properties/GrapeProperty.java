@@ -21,6 +21,11 @@ public class GrapeProperty extends Property<GrapeType> {
     }
 
     @Override
+    public List<GrapeType> getPossibleValues() {
+        return this.values;
+    }
+
+    @Override
     public int getInternalIndex(GrapeType grapeType) {
         int index = this.values.indexOf(grapeType);
         if (index < 0) throw new IllegalArgumentException("Unknown grape type: " + grapeType);
