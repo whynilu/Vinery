@@ -51,7 +51,7 @@ public class LineConnectingBlock extends Block {
     }
 
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             Direction facing = state.getValue(FACING);
             GeneralUtil.LineConnectingType type = switch (facing) {
                 case EAST -> this.getType(state, world.getBlockState(pos.south()), world.getBlockState(pos.north()));
