@@ -22,6 +22,7 @@ import net.satisfy.vinery.core.recipe.input.FermentationBarrelRecipeInput;
 import net.satisfy.vinery.platform.PlatformHelper;
 import net.minecraft.world.level.Level;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
+import net.satisfy.vinery.client.gui.handler.slot.FermentationBarrelOutputSlot;
 import net.satisfy.vinery.core.registry.RecipeTypeRegistry;
 import net.satisfy.vinery.core.registry.MenuTypeRegistry;
 import net.satisfy.vinery.core.wine.JuiceUtil;
@@ -84,7 +85,7 @@ public class FermentationBarrelMenu extends AbstractContainerMenu implements Sta
     }
 
     private boolean isIngredient(ItemStack stack) {
-        return this.level.getRecipeManager()
+        return this.level.recipeAccess()
                 .getAllRecipesFor(RecipeTypeRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get())
                 .stream()
                 .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
@@ -173,7 +174,7 @@ public class FermentationBarrelMenu extends AbstractContainerMenu implements Sta
         }
         FermentationBarrelRecipeInput.JuiceData juice = barrelRecipe.getJuiceData();
         if (barrelRecipe.isWineBottleRequired()) {
-            tooltip.add(Component.literal(" 1× ").append(ObjectRegistry.WINE_BOTTLE.get().getDescription()).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.literal(" 1× ").append(new ItemStack(ObjectRegistry.WINE_BOTTLE.get()).getHoverName()).withStyle(ChatFormatting.DARK_GRAY));
         }
         if (juice.amount() <= 0) {
             return;
@@ -215,7 +216,7 @@ public class FermentationBarrelMenu extends AbstractContainerMenu implements Sta
 
     private static Component juiceName(String type) {
         Item item = JuiceUtil.juiceItem(type);
-        return item == Items.AIR ? Component.literal(type) : item.getDescription();
+        return item == Items.AIR ? Component.literal(type) : new ItemStack(item).getHoverName();
     }
 
     @Override
