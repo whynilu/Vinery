@@ -42,8 +42,8 @@ import java.util.function.Supplier;
 public class DarkCherryChestBoatEntity extends ChestBoat {
 
     private static final EntityDataAccessor<Integer> WOOD_TYPE = SynchedEntityData.defineId(DarkCherryChestBoatEntity.class, EntityDataSerializers.INT);
-    public DarkCherryChestBoatEntity(EntityType<? extends Boat> entityType, Level level) {
-        super(entityType, level);
+    public DarkCherryChestBoatEntity(EntityType<? extends ChestBoat> entityType, Level level) {
+        super(entityType, level, () -> ObjectRegistry.DARK_CHERRY_CHEST_BOAT.get());
     }
 
     public DarkCherryChestBoatEntity(Level level, double x, double y, double z) {
@@ -61,14 +61,12 @@ public class DarkCherryChestBoatEntity extends ChestBoat {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-        if (pCompound.contains("Type", 8)) {
-            this.setWoodType(DarkCherryBoatEntity.Type.byName(pCompound.getString("Type")));
-        }
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput pCompound) {
+        pCompound.getString("Type").ifPresent(value -> this.setWoodType(DarkCherryBoatEntity.Type.byName(value)));
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putString("Type", this.getWoodType().getName());
     }
@@ -82,10 +80,6 @@ public class DarkCherryChestBoatEntity extends ChestBoat {
     }
     public DarkCherryBoatEntity.Type getModVariant() {
         return DarkCherryBoatEntity.Type.byId(this.entityData.get(WOOD_TYPE));
-    }
-    @Override
-    public @NotNull Item getDropItem() {
-        return this.getWoodType().getItem().get();
     }
 
     @Override
