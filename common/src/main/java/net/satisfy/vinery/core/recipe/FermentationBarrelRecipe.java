@@ -82,17 +82,14 @@ public class FermentationBarrelRecipe implements Recipe<FermentationBarrelRecipe
     }
 
 
-    @Override
     public @NotNull NonNullList<Ingredient> getIngredients() {
         return this.inputs;
     }
 
-    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
-    @Override
     public @NotNull ItemStack getResultItem(HolderLookup.Provider registryAccess) {
         return this.output.copy();
     }
