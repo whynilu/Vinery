@@ -109,7 +109,7 @@ public class DarkCherryBarrelBlockEntity extends RandomizableContainerBlockEntit
     @Override
     public void stopOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
-            this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 1.0);
+            this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
     }
 
