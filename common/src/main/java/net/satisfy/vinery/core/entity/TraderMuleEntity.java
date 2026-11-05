@@ -1,6 +1,8 @@
 package net.satisfy.vinery.core.entity;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -37,28 +39,26 @@ public class TraderMuleEntity extends AbstractChestedHorse {
 
 	public void aiStep() {
 		super.aiStep();
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.maybeDespawn();
 		}
 
 	}
 
-	public void addAdditionalSaveData(CompoundTag compoundTag) {
+	protected void addAdditionalSaveData(ValueOutput compoundTag) {
 		super.addAdditionalSaveData(compoundTag);
 		compoundTag.putInt("DespawnDelay", this.despawnDelay);
 	}
-	public void readAdditionalSaveData(CompoundTag compoundTag) {
+	protected void readAdditionalSaveData(ValueInput compoundTag) {
 		super.readAdditionalSaveData(compoundTag);
-		if (compoundTag.contains("DespawnDelay", 99)) {
-			this.despawnDelay = compoundTag.getInt("DespawnDelay");
-		}
+		this.despawnDelay = compoundTag.getInt("DespawnDelay").orElse(this.despawnDelay);
 	}
 
 	private void maybeDespawn() {
 		if (this.canDespawn()) {
 			this.despawnDelay = this.isLeashedToWanderingTrader() ? ((WanderingTrader) Objects.requireNonNull(this.getLeashHolder())).getDespawnDelay() - 1 : this.despawnDelay - 1;
 			if (this.despawnDelay <= 0) {
-				this.dropLeash(true, false);
+				this.dropLeash();
 				this.discard();
 			}
 		}
@@ -75,7 +75,7 @@ public class TraderMuleEntity extends AbstractChestedHorse {
 
 	@Override
 	public TraderMuleEntity getBreedOffspring(ServerLevel serverWorld, AgeableMob passiveEntity) {
-		return EntityTypeRegistry.MULE.get().create(this.level());
+		return EntityTypeRegistry.MULE.get().create(serverWorld, EntitySpawnReason.BREEDING);
 	}
 
 	@Override
