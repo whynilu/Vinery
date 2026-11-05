@@ -100,15 +100,15 @@ public class GeneralUtil {
     }
 
     public static InteractionResult onUse(Level world, Player player, InteractionHand hand, BlockHitResult hit, double extraHeight) {
-        if (world.isClientSide) return ItemInteractionResult.TRY_WITH_EMPTY_HAND;
-        if (player.isShiftKeyDown()) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        if (GeneralUtil.isPlayerSitting(player)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-        if (hit.getDirection() == Direction.DOWN) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        if (world.isClientSide()) return InteractionResult.PASS;
+        if (player.isShiftKeyDown()) return InteractionResult.PASS;
+        if (GeneralUtil.isPlayerSitting(player)) return InteractionResult.PASS;
+        if (hit.getDirection() == Direction.DOWN) return InteractionResult.PASS;
 
         BlockPos hitPos = hit.getBlockPos();
         if (!GeneralUtil.isOccupied(world, hitPos) && player.getItemInHand(hand).isEmpty()) {
             ChairEntity chair = EntityTypeRegistry.CHAIR.get().create(world);
-            if (chair == null) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            if (chair == null) return InteractionResult.PASS;
 
             BlockState s = world.getBlockState(hitPos);
             float yaw = 0.0F;
@@ -130,17 +130,17 @@ public class GeneralUtil {
             }
 
             chair.setSeatPos(hitPos);
-            chair.moveTo(hitPos.getX() + 0.5D, hitPos.getY() + 0.25D + extraHeight, hitPos.getZ() + 0.5D, 0, 0);
+            chair.setPos(hitPos.getX() + 0.5D, hitPos.getY() + 0.25D + extraHeight, hitPos.getZ() + 0.5D);
             chair.setYRot(yaw);
             chair.yRotO = yaw;
 
             if (GeneralUtil.addChairEntity(world, hitPos, chair, player.blockPosition())) {
                 world.addFreshEntity(chair);
                 player.startRiding(chair);
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.PASS;
     }
 
     public static boolean isOccupied(Level world, BlockPos pos) {
@@ -163,7 +163,7 @@ public class GeneralUtil {
     }
 
     public static void onStateReplaced(Level world, BlockPos pos) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             ChairEntity entity = GeneralUtil.getChairEntity(world, pos);
             if (entity != null) {
                 GeneralUtil.removeChairEntity(world, pos);
@@ -173,7 +173,7 @@ public class GeneralUtil {
     }
 
     public static boolean addChairEntity(Level world, BlockPos blockPos, ChairEntity entity, BlockPos playerPos) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             Identifier id = getDimensionTypeId(world);
             if (!CHAIRS.containsKey(id)) CHAIRS.put(id, new HashMap<>());
             CHAIRS.get(id).put(blockPos, Pair.of(entity, playerPos));
@@ -183,7 +183,7 @@ public class GeneralUtil {
     }
 
     public static void removeChairEntity(Level world, BlockPos pos) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             Identifier id = getDimensionTypeId(world);
             if (CHAIRS.containsKey(id)) {
                 CHAIRS.get(id).remove(pos);
@@ -192,7 +192,7 @@ public class GeneralUtil {
     }
 
     public static ChairEntity getChairEntity(Level world, BlockPos pos) {
-        if (!world.isClientSide()) {
+        if (!world.isClientSide()()) {
             Identifier id = getDimensionTypeId(world);
             if (CHAIRS.containsKey(id) && CHAIRS.get(id).containsKey(pos))
                 return CHAIRS.get(id).get(pos).getFirst();
@@ -244,14 +244,14 @@ public class GeneralUtil {
         int i = side.getStepX();
         int j = side.getStepY();
         int k = side.getStepZ();
-        double deltaX = i == 0 ? Mth.nextDouble(level.random, -0.1, 0.1) : (double)i * 0.1;
-        double deltaY = j == 0 ? Mth.nextDouble(level.random, 0.0, 0.1) : (double)j * 0.1 + 0.1;
-        double deltaZ = k == 0 ? Mth.nextDouble(level.random, -0.1, 0.1) : (double)k * 0.1;
+        double deltaX = i == 0 ? Mth.nextDouble(level.getRandom(), -0.1, 0.1) : (double)i * 0.1;
+        double deltaY = j == 0 ? Mth.nextDouble(level.getRandom(), 0.0, 0.1) : (double)j * 0.1 + 0.1;
+        double deltaZ = k == 0 ? Mth.nextDouble(level.getRandom(), -0.1, 0.1) : (double)k * 0.1;
         popResource(level, new ItemEntity(level, posX + offsetX, posY + offsetY, posZ + offsetZ, itemStack, deltaX, deltaY, deltaZ), itemStack);
     }
 
     private static void popResource(Level level, ItemEntity itemEntity, ItemStack itemStack) {
-        if (!level.isClientSide && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.BLOCK_DROPS)) {
+        if (!level.isClientSide() && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.BLOCK_DROPS)) {
             itemEntity.setDefaultPickUpDelay();
             level.addFreshEntity(itemEntity);
         }
