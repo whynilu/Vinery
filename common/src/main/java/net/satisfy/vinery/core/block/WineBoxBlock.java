@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class WineBoxBlock extends StorageBlock {
-    public static final EnumProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
     private static final Supplier<VoxelShape> shapeOpen = () -> {

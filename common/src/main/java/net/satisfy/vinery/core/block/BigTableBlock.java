@@ -1,6 +1,5 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,7 +52,7 @@ public class BigTableBlock extends HorizontalDirectionalBlock {
 		}
 	});
 	
-	public static final EnumProperty FACING = HorizontalDirectionalBlock.FACING;
+	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 	
 	public BigTableBlock(Properties settings) {
 		super(settings);
@@ -61,15 +60,11 @@ public class BigTableBlock extends HorizontalDirectionalBlock {
 	}
 
 	@Override
-	protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-		return simpleCodec(BigTableBlock::new);
-	}
-
-	public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+	protected @NotNull BlockState updateShape(BlockState state, net.minecraft.world.level.LevelReader world, net.minecraft.world.level.ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, net.minecraft.util.RandomSource random) {
 		if (direction == getDirectionTowardsOtherPart(state.getValue(PART), state.getValue(FACING))) {
 			return neighborState.is(this) && neighborState.getValue(PART) != state.getValue(PART) ? state : Blocks.AIR.defaultBlockState();
 		} else {
-			return super.updateShape(state, direction, neighborState, world, pos, neighborPos);
+			return super.updateShape(state, world, ticks, pos, direction, neighborPos, neighborState, random);
 		}
 	}
 	
@@ -78,7 +73,7 @@ public class BigTableBlock extends HorizontalDirectionalBlock {
 	}
 
 	public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
-		if (!world.isClientSide && player.isCreative()) {
+		if (!world.isClientSide() && player.isCreative()) {
 			removeOtherPart(world, pos, state, player);
 		}
 
@@ -119,7 +114,6 @@ public class BigTableBlock extends HorizontalDirectionalBlock {
 	private void placeOtherPart(Level world, BlockPos pos, BlockState state) {
 		BlockPos blockPos = pos.relative(state.getValue(FACING));
 		world.setBlock(blockPos, state.setValue(PART, BedPart.HEAD), Block.UPDATE_ALL);
-		world.blockUpdated(pos, Blocks.AIR);
 		state.updateNeighbourShapes(world, pos, Block.UPDATE_ALL);
 	}
 	

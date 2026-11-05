@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class ChairBlock extends Block {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-    public static final EnumProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private static final VoxelShape SHAPE_LOWER = makeLowerShape();
     private static final VoxelShape SHAPE_UPPER = makeUpperShape();
@@ -90,7 +90,7 @@ public class ChairBlock extends Block {
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
         Level world = context.getLevel();
-        return pos.getY() < world.getMaxBuildHeight() - 1 && world.getBlockState(pos.above()).canBeReplaced(context) ? this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER) : null;
+        return pos.getY() < world.getMaxY() - 1 && world.getBlockState(pos.above()).canBeReplaced(context) ? this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(HALF, DoubleBlockHalf.LOWER) : null;
     }
 
     public ChairBlock(Properties settings) {
@@ -107,23 +107,14 @@ public class ChairBlock extends Block {
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock())) {
-            if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                BlockPos abovePos = pos.above();
-                BlockState aboveState = world.getBlockState(abovePos);
-                if (aboveState.getBlock() == this && aboveState.getValue(HALF) == DoubleBlockHalf.UPPER) {
-                    world.setBlock(abovePos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
-                }
-            } else {
-                BlockPos belowPos = pos.below();
-                BlockState belowState = world.getBlockState(belowPos);
-                if (belowState.getBlock() == this && belowState.getValue(HALF) == DoubleBlockHalf.LOWER) {
-                    world.setBlock(belowPos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
-                }
-            }
-            super.onRemove(state, world, pos, newState, moved);
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel world, BlockPos pos, boolean movedByPiston) {
+        BlockPos otherPos = state.getValue(HALF) == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
+        BlockState otherState = world.getBlockState(otherPos);
+        DoubleBlockHalf otherHalf = state.getValue(HALF) == DoubleBlockHalf.LOWER ? DoubleBlockHalf.UPPER : DoubleBlockHalf.LOWER;
+        if (otherState.is(this) && otherState.getValue(HALF) == otherHalf) {
+            world.setBlock(otherPos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 35);
         }
+        super.affectNeighborsAfterRemoval(state, world, pos, movedByPiston);
     }
 
     @Override
