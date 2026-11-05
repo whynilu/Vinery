@@ -13,7 +13,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -113,11 +115,11 @@ public class WineBottleBlock extends StorageBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+    protected @NotNull BlockState updateShape(BlockState blockState, LevelReader levelAccessor, ScheduledTickAccess ticks, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState2, RandomSource random) {
         if (direction == Direction.DOWN && !blockState.canSurvive(levelAccessor, blockPos)) {
             levelAccessor.destroyBlock(blockPos, true);
         }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return super.updateShape(blockState, levelAccessor, ticks, blockPos, direction, blockPos2, blockState2, random);
     }
     @Override
     public int size() {

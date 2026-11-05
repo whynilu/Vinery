@@ -1,6 +1,5 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +15,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -37,11 +38,6 @@ public class BigBottleStorageBlock extends StorageBlock {
         this.registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
     }
 
-    @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return simpleCodec(BigBottleStorageBlock::new);
-    }
-
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     private static final SoundEvent OPEN_SOUND = SoundEvents.BAMBOO_WOOD_DOOR_OPEN;
 
@@ -54,7 +50,7 @@ public class BigBottleStorageBlock extends StorageBlock {
                 world.playSound(null, pos, OPEN_SOUND, SoundSource.BLOCKS, 0.4f, 0.4f);
                 world.setBlock(pos, state.setValue(OPEN, !state.getValue(OPEN)), UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(world.isClientSide());
+            return world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER;
         } else if (state.getValue(OPEN)) {
             return super.useWithoutItem(state, world, pos, player, hit);
         }
@@ -93,7 +89,7 @@ public class BigBottleStorageBlock extends StorageBlock {
     }
 
     @Override
-    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, List<Component> list, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipDisplay display, Consumer<Component> tooltip) {
         MutableComponent allBold = Component.translatable("tooltip.vinery.large_bottle_first")
                 .withStyle(style -> style.withBold(true).withColor(ChatFormatting.GRAY));
         MutableComponent allRest = Component.translatable("tooltip.vinery.large_bottle_rest")
@@ -103,6 +99,6 @@ public class BigBottleStorageBlock extends StorageBlock {
         MutableComponent full = Component.translatable("tooltip.vinery.storage", combined)
                 .withStyle(ChatFormatting.GRAY);
 
-        list.add(full);
+        tooltip.accept(full);
     }
 }

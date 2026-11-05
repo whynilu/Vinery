@@ -1,6 +1,5 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -59,13 +58,8 @@ public class FermentationBarrelBlock extends HorizontalDirectionalBlock implemen
     }
 
     @Override
-    protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
-        return simpleCodec(FermentationBarrelBlock::new);
-    }
-
-    @Override
     public @NotNull InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player, BlockHitResult hit) {
-        if (world.isClientSide) {
+        if (world.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
 
@@ -99,16 +93,11 @@ public class FermentationBarrelBlock extends HorizontalDirectionalBlock implemen
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock())) {
-            final BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof FermentationBarrelBlockEntity) {
-                if (world instanceof ServerLevel) {
-                    Containers.dropContents(world, pos, (Container) blockEntity);
-                }
-                world.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, world, pos, newState, moved);
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean movedByPiston) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof FermentationBarrelBlockEntity) {
+            Containers.dropContents(world, pos, (Container) blockEntity);
+            Containers.updateNeighboursAfterDestroy(state, world, pos);
         }
     }
 
@@ -121,7 +110,7 @@ public class FermentationBarrelBlock extends HorizontalDirectionalBlock implemen
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null
+        return level.isClientSide() ? null
                 : createTicker(type, EntityTypeRegistry.FERMENTATION_BARREL_ENTITY.get(), (world, pos, state1, blockEntity) -> FermentationBarrelBlockEntity.tick(world, pos, blockEntity));
     }
 
