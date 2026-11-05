@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.satisfy.foundation.storage.StorageBlockEntity;
+import net.satisfy.vinery.core.block.entity.StorageBlockEntity;
 import net.satisfy.vinery.core.item.DrinkBlockItem;
 import net.satisfy.vinery.core.wine.WineYears;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = StorageBlockEntity.class, remap = false)
+@Mixin(StorageBlockEntity.class)
 public abstract class StorageBlockEntityMixin extends BlockEntity {
     public StorageBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
