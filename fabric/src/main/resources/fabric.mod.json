@@ -34,12 +34,6 @@
     "rei_client": [
       "net.satisfy.vinery.fabric.core.rei.VineryReiClientPluginFabric"
     ],
-    "emi": [
-      "net.satisfy.vinery.core.compat.emi.VineryEmiPlugin"
-    ],
-    "jei_mod_plugin": [
-      "net.satisfy.vinery.core.compat.jei.VineryJEIPlugin"
-    ],
     "modmenu": [
       "net.satisfy.vinery.fabric.config.ModMenu"
     ]
