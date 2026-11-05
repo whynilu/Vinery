@@ -1,7 +1,8 @@
 package net.satisfy.vinery.core.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -55,18 +56,18 @@ public class ChairEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        if (tag.contains("spx")) {
-            int x = tag.getInt("spx");
-            int y = tag.getInt("spy");
-            int z = tag.getInt("spz");
+    protected void readAdditionalSaveData(ValueInput tag) {
+        if (tag.getInt("spx").isPresent() && tag.getInt("spy").isPresent() && tag.getInt("spz").isPresent()) {
+            int x = tag.getInt("spx").get();
+            int y = tag.getInt("spy").get();
+            int z = tag.getInt("spz").get();
             this.seatPos = new BlockPos(x, y, z);
             this.seatPosInit = true;
         }
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         BlockPos p = this.seatPos != null ? this.seatPos : this.blockPosition();
         tag.putInt("spx", p.getX());
         tag.putInt("spy", p.getY());
@@ -93,7 +94,7 @@ public class ChairEntity extends Entity {
             yaw = s.getValue(BlockStateProperties.FACING).toYRot();
         } else {
             for (Property<?> prop : s.getProperties()) {
-                if (prop.getName().equals("facing") && prop instanceof net.minecraft.world.level.block.state.properties.DirectionProperty dir) {
+                if (prop.getName().equals("facing") && prop instanceof net.minecraft.world.level.block.state.properties.EnumProperty dir) {
                     yaw = s.getValue(dir).toYRot();
                     break;
                 }
@@ -139,7 +140,7 @@ public class ChairEntity extends Entity {
         if (!getPassengers().isEmpty()) {
             for (Entity e : getPassengers()) {
                 if (e instanceof Player p) {
-                    if (!level().isClientSide) p.setDeltaMovement(Vec3.ZERO);
+                    if (!level().isClientSide()) p.setDeltaMovement(Vec3.ZERO);
                     float yaw = getYRot();
                     p.setYBodyRot(yaw);
                     p.yBodyRotO = yaw;
