@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -49,7 +49,7 @@ import java.util.function.Supplier;
 @SuppressWarnings("deprecation, unused")
 public class StackableLogBlock extends SlabBlock {
     public static final BooleanProperty FIRED = BooleanProperty.create("fired");
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty FACING = HorizontalDirectionalBlock.FACING;
 
 
     public StackableLogBlock(Properties settings) {
@@ -188,7 +188,7 @@ public class StackableLogBlock extends SlabBlock {
     protected static final VoxelShape TOP_AABB = TOP_AABB_SUPPLIER.get();
     protected static final VoxelShape DOUBLE = DOUBLE_SUPPLIER.get();
 
-    public static final Map<Direction, Map<SlabType, VoxelShape>> SHAPE = net.minecraft.Util.make(new HashMap<>(), map -> {
+    public static final Map<Direction, Map<SlabType, VoxelShape>> SHAPE = net.minecraft.util.Util.make(new HashMap<>(), map -> {
         for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList()) {
             map.put(direction, new HashMap<>());
             map.get(direction).put(SlabType.DOUBLE, GeneralUtil.rotateShape(Direction.NORTH, direction, DOUBLE_SUPPLIER.get()));
