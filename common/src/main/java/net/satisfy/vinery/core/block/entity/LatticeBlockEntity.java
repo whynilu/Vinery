@@ -64,12 +64,7 @@ public class LatticeBlockEntity extends BlockEntity {
         tag.putBoolean("ShowHanging", showHanging);
     }
 
-    @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        saveAdditional(tag,provider);
-        return tag;
-    }
+
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
