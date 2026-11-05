@@ -40,9 +40,9 @@ public class DirtSlabBlock extends SlabBlock {
                     heldItem.hurtAndBreak(1,player, EquipmentSlot.OFFHAND);
                 }
             }
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
 
-        return ItemInteractionResult.TRY_WITH_EMPTY_HAND;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 }

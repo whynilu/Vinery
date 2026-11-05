@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -60,21 +59,21 @@ public class WineBottleBlock extends StorageBlock {
                     }
                     world.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
-                return InteractionResult.sidedSuccess(world.isClientSide());
+                return (world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER);
             } else if (stack.isEmpty() && !isEmpty(inventory)) {
                 int posInE = getLastFullSlot(inventory);
                 if(posInE == Integer.MIN_VALUE) return InteractionResult.TRY_WITH_EMPTY_HAND;
                 if(!world.isClientSide()){
                     ItemStack wine = wineEntity.removeStack(posInE);
                     if (!player.getInventory().add(wine)) {
-                        player.drop(wine, false);
+                        player.drop(wine, false, net.minecraft.util.Prediction.SERVER_ONLY);
                     }
                     if (isEmpty(inventory)) {
                         world.destroyBlock(pos, false);
                     }
                     world.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
-                return InteractionResult.sidedSuccess(world.isClientSide());
+                return (world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER);
             }
         }
         return InteractionResult.TRY_WITH_EMPTY_HAND;

@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -90,7 +89,7 @@ public class PaleStemBlock extends StemBlock {
             dropGrapeSeeds(world, state, pos, hit.getDirection());
             world.setBlock(pos, withAge(state, Math.max(0, age - 1), state.getValue(GRAPE)), 3);
             world.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_BREAK, SoundSource.AMBIENT, 1.0F, 1.0F);
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            return (world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER);
         }
         if (stack.getItem() instanceof GrapeBushSeedItem seed && hasTrunk(world, pos)) {
             if (age == 0) {
@@ -99,7 +98,7 @@ public class PaleStemBlock extends StemBlock {
                     BlockState ns = withAge(state, 1, seed.getType());
                     if (schedule && !state.getValue(LEAVES_PENDING) && !state.getValue(LEAVES_DONE)) {
                         ns = ns.setValue(LEAVES_PENDING, true);
-                        int delay = 4800 + world.random.nextInt(4801);
+                        int delay = 4800 + world.getRandom().nextInt(4801);
                         world.scheduleTick(pos, this, delay);
                     }
                     world.setBlock(pos, ns, 3);
@@ -117,9 +116,9 @@ public class PaleStemBlock extends StemBlock {
     @Override
     public void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean moved) {
         super.onPlace(state, world, pos, oldState, moved);
-        if (!world.isClientSide && (state.getValue(GRAPE) == GrapeTypeRegistry.WHITE || state.getValue(GRAPE) == GrapeTypeRegistry.RED) && !state.getValue(LEAVES_PENDING) && !state.getValue(LEAVES_DONE)) {
+        if (!world.isClientSide() && (state.getValue(GRAPE) == GrapeTypeRegistry.WHITE || state.getValue(GRAPE) == GrapeTypeRegistry.RED) && !state.getValue(LEAVES_PENDING) && !state.getValue(LEAVES_DONE)) {
             world.setBlock(pos, state.setValue(LEAVES_PENDING, true), 3);
-            int delay = 4800 + world.random.nextInt(4801);
+            int delay = 4800 + world.getRandom().nextInt(4801);
             world.scheduleTick(pos, this, delay);
         }
     }

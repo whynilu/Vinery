@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -97,7 +96,7 @@ public class WineBoxBlock extends StorageBlock {
             if (!world.isClientSide()) {
                 world.setBlock(pos, state.setValue(OPEN, !state.getValue(OPEN)), Block.UPDATE_ALL);
             }
-            return InteractionResult.sidedSuccess(world.isClientSide());
+            return (world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER);
         } else if (state.getValue(OPEN)) {
             return super.useItemOn(stack,state, world, pos, player, hand, hit);
         }
