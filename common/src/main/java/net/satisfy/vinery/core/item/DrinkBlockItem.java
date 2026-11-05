@@ -121,7 +121,6 @@ public class DrinkBlockItem extends BlockItem {
     }
 
 
-    @Override
     public InteractionResult place(BlockPlaceContext context) {
         InteractionResult result = super.place(context);
         if (result.consumesAction() && !context.getLevel().isClientSide()
