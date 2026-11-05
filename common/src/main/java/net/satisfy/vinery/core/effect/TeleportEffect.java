@@ -47,7 +47,7 @@ public class TeleportEffect extends InstantaneousMobEffect {
             }
         }
         if (target != null) {
-            if (!player.level().isClientSide()()) {
+            if (!player.level().isClientSide()) {
                 Vec3 teleportVec = new Vec3(target.getX(), target.getY(), target.getZ());
                 player.teleportRelative(teleportVec.x + 0.5, teleportVec.y, teleportVec.z + 0.5);
             }
