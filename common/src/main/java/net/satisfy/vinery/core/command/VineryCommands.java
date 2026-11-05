@@ -11,7 +11,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,7 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -85,7 +85,7 @@ public final class VineryCommands {
                                                 .executes(ctx -> spawnWinemaker(ctx.getSource(), BlockPosArgument.getSpawnablePos(ctx, "pos")))))
                                 .then(Commands.literal("locate").executes(ctx -> locateWinemakers(ctx.getSource()))))
                         .then(Commands.literal("effect").requires(source -> source.hasPermission(2))
-                                .then(Commands.argument("wine", ResourceLocationArgument.id()).suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(wineIds(), builder))
+                                .then(Commands.argument("wine", IdentifierArgument.id()).suggests((ctx, builder) -> SharedSuggestionProvider.suggestResource(wineIds(), builder))
                                         .executes(ctx -> giveEffect(ctx, List.of(ctx.getSource().getPlayerOrException()), -1))
                                         .then(Commands.argument("targets", EntityArgument.players())
                                                 .executes(ctx -> giveEffect(ctx, EntityArgument.getPlayers(ctx, "targets"), -1))
@@ -235,7 +235,7 @@ public final class VineryCommands {
     }
 
     private static int giveEffect(CommandContext<CommandSourceStack> ctx, Collection<ServerPlayer> players, int amplifier) {
-        ResourceLocation id = ResourceLocationArgument.getId(ctx, "wine");
+        Identifier id = IdentifierArgument.getId(ctx, "wine");
         Item wine = BuiltInRegistries.ITEM.getOptional(id).orElse(null);
         WineEffects.WineEffect effect = wine == null ? null : WineEffects.get(wine);
         if (effect == null) {
@@ -283,9 +283,9 @@ public final class VineryCommands {
     }
 
     private static int dumpEffects(CommandSourceStack source) {
-        List<ResourceLocation> wines = wineIds();
+        List<Identifier> wines = wineIds();
         header(source, "command.vinery.dump.effects", "%s wines with an effect", wines.size());
-        for (ResourceLocation id : wines) {
+        for (Identifier id : wines) {
             WineEffects.WineEffect effect = WineEffects.get(BuiltInRegistries.ITEM.get(id));
             String line = id + " → " + effect.effect().unwrapKey().map(key -> key.location().toString()).orElse("?") + " " + (effect.amplifier() + 1) + ", " + effect.duration() + " ticks";
             source.sendSuccess(() -> Component.literal(line), false);
@@ -301,7 +301,7 @@ public final class VineryCommands {
         return GrapeTypeRegistry.GRAPE_TYPE_TYPES.stream().filter(type -> !type.equals(GrapeTypeRegistry.NONE)).map(GrapeType::getId).sorted().toList();
     }
 
-    private static List<ResourceLocation> wineIds() {
+    private static List<Identifier> wineIds() {
         return BuiltInRegistries.ITEM.stream().filter(item -> WineEffects.get(item) != null).map(BuiltInRegistries.ITEM::getKey).sorted().toList();
     }
 
