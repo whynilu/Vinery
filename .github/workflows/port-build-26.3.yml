@@ -8,7 +8,7 @@ on:
 
 concurrency:
   group: vinery-26.3-fabric-build
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: read
