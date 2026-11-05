@@ -4,7 +4,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.vinery.core.wine.GrapeType;
 
-public class GrapeBushSeedItem extends ItemNameBlockItem {
+public class GrapeBushSeedItem extends BlockItem {
     private final GrapeType type;
 
     public GrapeBushSeedItem(Block block, Properties settings, GrapeType type) {
