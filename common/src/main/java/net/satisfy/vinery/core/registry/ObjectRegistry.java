@@ -27,7 +27,6 @@ import net.satisfy.vinery.core.entity.DarkCherryBoatEntity;
 import net.satisfy.vinery.core.item.*;
 import net.satisfy.vinery.core.util.GeneralUtil;
 import net.satisfy.vinery.core.util.WineSettings;
-import net.satisfy.vinery.core.world.feature.VineryConfiguredFeatures;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -70,8 +69,8 @@ public class ObjectRegistry {
     public static final RegistrySupplier<Block> JUNGLE_WHITE_GRAPE_BUSH = registerWithoutItem("jungle_grape_bush_white", () -> new GrapeVineBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH), GrapeTypeRegistry.JUNGLE_WHITE));
     public static final RegistrySupplier<Item> JUNGLE_WHITE_GRAPE_SEEDS = registerItem("jungle_grape_seeds_white", () -> new GrapeBushSeedItem(JUNGLE_WHITE_GRAPE_BUSH.get(), getSettings(), GrapeTypeRegistry.JUNGLE_WHITE));
     public static final RegistrySupplier<Item> JUNGLE_WHITE_GRAPE = registerItem("jungle_grapes_white", () -> new GrapeItem(getSettings().food(Foods.BAKED_POTATO), GrapeTypeRegistry.JUNGLE_WHITE, ObjectRegistry.JUNGLE_WHITE_GRAPE_SEEDS.get()));
-    public static final RegistrySupplier<Block> DARK_CHERRY_SAPLING = registerWithItem("dark_cherry_sapling", () -> new SaplingBlock(new TreeGrower("dark_cherry_tree",Optional.of(VineryConfiguredFeatures.DARK_CHERRY_KEY),Optional.of(VineryConfiguredFeatures.DARK_CHERRY_KEY), Optional.empty()) , BlockBehaviour.Properties.of().noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
-    public static final RegistrySupplier<Block> APPLE_TREE_SAPLING = registerWithItem("apple_tree_sapling", () -> new SaplingBlock(new TreeGrower("apple_tree",Optional.of(VineryConfiguredFeatures.APPLE_KEY),Optional.of(VineryConfiguredFeatures.APPLE_VARIANT_KEY),Optional.empty()),BlockBehaviour.Properties.of().noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistrySupplier<Block> DARK_CHERRY_SAPLING = registerWithItem("dark_cherry_sapling", () -> new SaplingBlock(TreeGrower.OAK , BlockBehaviour.Properties.of().noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
+    public static final RegistrySupplier<Block> APPLE_TREE_SAPLING = registerWithItem("apple_tree_sapling", () -> new SaplingBlock(TreeGrower.OAK,BlockBehaviour.Properties.of().noCollission().randomTicks().instabreak().sound(SoundType.GRASS)));
     public static final RegistrySupplier<Item> CHERRY = registerItem("cherry", () -> new Item(getSettings().food(Foods.COOKIE)));
     public static final RegistrySupplier<Item> ROTTEN_CHERRY = registerItem("rotten_cherry", () -> new RottenCherryItem(getSettings().food(Foods.POISONOUS_POTATO)));
     public static final RegistrySupplier<Block> GRAPEVINE_LEAVES = registerWithItem("grapevine_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)));
