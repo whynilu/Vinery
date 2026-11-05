@@ -5,8 +5,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.satisfy.foundation.trade.BuyForOneEmeraldFactory;
-import net.satisfy.foundation.trade.SellItemFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +78,8 @@ public final class VineryTrades {
                 continue;
             }
             listings.add(parts[1].equals("buy")
-                    ? new BuyForOneEmeraldFactory(item, price, maxUses, experience)
-                    : new SellItemFactory(item, price, count, maxUses, experience));
+                    ? new VillagerTrades.EmeraldForItems(item, price, maxUses, experience)
+                    : new VillagerTrades.ItemsForEmeralds(item, price, count, maxUses, experience));
         }
         return listings;
     }
