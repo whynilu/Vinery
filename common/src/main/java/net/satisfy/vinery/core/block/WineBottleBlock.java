@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -44,7 +44,7 @@ public class WineBottleBlock extends StorageBlock {
     }
 
     @Override
-    public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
 
         if(blockEntity instanceof StorageBlockEntity wineEntity){
@@ -52,7 +52,7 @@ public class WineBottleBlock extends StorageBlock {
 
             if (canInsertStack(stack) && willFitStack(stack, inventory)) {
                 int posInE = getFirstEmptySlot(inventory);
-                if(posInE == Integer.MIN_VALUE) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                if(posInE == Integer.MIN_VALUE) return InteractionResult.TRY_WITH_EMPTY_HAND;
                 if(!world.isClientSide()){
                     wineEntity.setStack(posInE, stack.split(1));
                     if (player.isCreative()) {
@@ -60,10 +60,10 @@ public class WineBottleBlock extends StorageBlock {
                     }
                     world.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
-                return ItemInteractionResult.sidedSuccess(world.isClientSide());
+                return InteractionResult.sidedSuccess(world.isClientSide());
             } else if (stack.isEmpty() && !isEmpty(inventory)) {
                 int posInE = getLastFullSlot(inventory);
-                if(posInE == Integer.MIN_VALUE) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                if(posInE == Integer.MIN_VALUE) return InteractionResult.TRY_WITH_EMPTY_HAND;
                 if(!world.isClientSide()){
                     ItemStack wine = wineEntity.removeStack(posInE);
                     if (!player.getInventory().add(wine)) {
@@ -74,10 +74,10 @@ public class WineBottleBlock extends StorageBlock {
                     }
                     world.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                 }
-                return ItemInteractionResult.sidedSuccess(world.isClientSide());
+                return InteractionResult.sidedSuccess(world.isClientSide());
             }
         }
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     public boolean isEmpty(NonNullList<ItemStack> inventory){
