@@ -1,6 +1,6 @@
 package net.satisfy.vinery.core.item;
 
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.satisfy.vinery.core.wine.GrapeType;
 
