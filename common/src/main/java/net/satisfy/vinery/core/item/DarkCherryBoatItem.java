@@ -17,6 +17,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.satisfy.vinery.core.entity.DarkCherryBoatEntity;
 import net.satisfy.vinery.core.entity.DarkCherryChestBoatEntity;
+import net.satisfy.vinery.core.registry.EntityTypeRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class DarkCherryBoatItem extends BoatItem {
     private final boolean hasChest;
 
     public DarkCherryBoatItem(boolean hasChest, DarkCherryBoatEntity.Type type, Properties pProperties) {
-        super(hasChest, null, pProperties);
+        super(hasChest ? EntityTypeRegistry.DARK_CHERRY_CHEST_BOAT.get() : EntityTypeRegistry.DARK_CHERRY_BOAT.get(), pProperties);
         this.hasChest = hasChest;
         this.type = type;
     }
