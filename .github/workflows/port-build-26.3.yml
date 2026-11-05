@@ -16,6 +16,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -26,8 +27,10 @@ jobs:
           java-version: '25'
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Inspect common compile classpath
+        run: ./gradlew --no-daemon :common:dependencies --configuration compileClasspath --console=plain
       - name: Build Fabric mod
-        run: ./gradlew --no-daemon :fabric:build --stacktrace
+        run: ./gradlew --no-daemon :fabric:build --stacktrace --info --console=plain
       - name: Upload mod jar
         if: success()
         uses: actions/upload-artifact@v4
