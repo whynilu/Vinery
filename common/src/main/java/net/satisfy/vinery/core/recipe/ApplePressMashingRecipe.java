@@ -81,32 +81,22 @@ public class ApplePressMashingRecipe implements Recipe<ApplePressMashingRecipeIn
         return output;
     }
 
-    public static class Serializer implements RecipeSerializer<ApplePressMashingRecipe> {
+    public static final MapCodec<ApplePressMashingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(ApplePressMashingRecipe::getInput),
+            ItemStack.CODEC.fieldOf("output").forGetter(ApplePressMashingRecipe::getOutput)
+    ).apply(inst, ApplePressMashingRecipe::new));
 
-        @Override
-        public MapCodec<ApplePressMashingRecipe> codec() {
-            return RecordCodecBuilder.mapCodec(inst->inst.group(
-                    Ingredient.CODEC.fieldOf("input").forGetter(ApplePressMashingRecipe::getInput),
-                    ItemStack.CODEC.fieldOf("output").forGetter(ApplePressMashingRecipe::getOutput)
-            ).apply(inst,ApplePressMashingRecipe::new));
-        }
+    public static final StreamCodec<RegistryFriendlyByteBuf, ApplePressMashingRecipe> STREAM_CODEC = StreamCodec.of(
+            (buf, recipe) -> {
+                Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.getInput());
+                ItemStack.STREAM_CODEC.encode(buf, recipe.getOutput());
+            },
+            buf -> new ApplePressMashingRecipe(
+                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                    ItemStack.STREAM_CODEC.decode(buf)
+            )
+    );
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ApplePressMashingRecipe> streamCodec() {
-            return new StreamCodec<>(){
-
-                @Override
-                public void encode(RegistryFriendlyByteBuf buf, ApplePressMashingRecipe recipe) {
-                    Ingredient.CONTENTS_STREAM_CODEC.encode(buf,recipe.getInput());
-                    ItemStack.STREAM_CODEC.encode(buf,recipe.getOutput());
-                }
-
-                @Override
-                public ApplePressMashingRecipe decode(RegistryFriendlyByteBuf buf) {
-                    return new ApplePressMashingRecipe(Ingredient.CONTENTS_STREAM_CODEC.decode(buf),ItemStack.STREAM_CODEC.decode(buf));                }
-            };
-        }
-    }
-
+    public static final RecipeSerializer<ApplePressMashingRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
 }
