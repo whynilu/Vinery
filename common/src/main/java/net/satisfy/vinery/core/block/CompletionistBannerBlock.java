@@ -14,6 +14,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -112,11 +114,11 @@ public class CompletionistBannerBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction, @NotNull BlockState blockState2, @NotNull LevelAccessor levelAccessor, @NotNull BlockPos blockPos, @NotNull BlockPos blockPos2) {
-        if (direction == Direction.DOWN && !blockState.canSurvive(levelAccessor, blockPos)) {
+    protected @NotNull BlockState updateShape(@NotNull BlockState blockState, LevelReader levelReader, ScheduledTickAccess ticks, @NotNull BlockPos blockPos, @NotNull Direction direction, @NotNull BlockPos neighbourPos, @NotNull BlockState neighbourState, RandomSource random) {
+        if (direction == Direction.DOWN && !blockState.canSurvive(levelReader, blockPos)) {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return super.updateShape(blockState, levelReader, ticks, blockPos, direction, neighbourPos, neighbourState, random);
     }
 
     public Identifier getRenderTexture() {
