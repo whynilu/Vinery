@@ -46,7 +46,7 @@ public class DarkCherryBarrelBlockEntity extends RandomizableContainerBlockEntit
             }
 
             @Override
-            protected boolean isOwnContainer(Player player) {
+            public boolean isOwnContainer(Player player) {
                 if (player.containerMenu instanceof ChestMenu) {
                     Container inventory = ((ChestMenu) player.containerMenu).getContainer();
                     return inventory == DarkCherryBarrelBlockEntity.this;
@@ -102,14 +102,14 @@ public class DarkCherryBarrelBlockEntity extends RandomizableContainerBlockEntit
     @Override
     public void startOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
-            this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+            this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 1.0);
         }
     }
 
     @Override
     public void stopOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
-            this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
+            this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 1.0);
         }
     }
 
