@@ -4,7 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -105,19 +106,19 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.saveAdditional(nbt,provider);
-        ContainerHelper.saveAllItems(nbt, inventory,provider);
+    protected void saveAdditional(ValueOutput nbt) {
+        super.saveAdditional(nbt);
+        ContainerHelper.saveAllItems(nbt, inventory);
         nbt.putInt("apple_press.progress1", progress1);
         nbt.putInt("apple_press.progress2", progress2);
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.loadAdditional(nbt,provider);
-        ContainerHelper.loadAllItems(nbt, inventory,provider);
-        progress1 = nbt.getInt("apple_press.progress1");
-        progress2 = nbt.getInt("apple_press.progress2");
+    protected void loadAdditional(ValueInput nbt) {
+        super.loadAdditional(nbt);
+        ContainerHelper.loadAllItems(nbt, inventory);
+        progress1 = nbt.getInt("apple_press.progress1").orElse(0);
+        progress2 = nbt.getInt("apple_press.progress2").orElse(0);
     }
 
     @Override
