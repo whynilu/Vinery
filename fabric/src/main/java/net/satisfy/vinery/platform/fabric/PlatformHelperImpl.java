@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  * Architectury @ExpectPlatform implementation class.
  */
 public final class PlatformHelperImpl extends PlatformHelper {
-    private PlatformHelperImpl() {}
+    public PlatformHelperImpl() {}
 
     private static VineryFabricConfig config() {
         return AutoConfig.getConfigHolder(VineryFabricConfig.class).getConfig();
