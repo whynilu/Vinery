@@ -32,10 +32,6 @@ public class CompletionistWallBannerBlock extends CompletionistBannerBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
-    public @NotNull String getDescriptionId() {
-        return this.asItem().getDescriptionId();
-    }
-
     @SuppressWarnings("deprecation")
     public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
         return levelReader.getBlockState(blockPos.relative(blockState.getValue(FACING))).isSolid();
