@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -34,18 +34,18 @@ import java.util.Map;
 
 public class ChairBlock extends Block {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private static final VoxelShape SHAPE_LOWER = makeLowerShape();
     private static final VoxelShape SHAPE_UPPER = makeUpperShape();
 
-    public static final Map<Direction, VoxelShape> SHAPE_LOWER_MAP = net.minecraft.Util.make(new HashMap<>(), map -> {
+    public static final Map<Direction, VoxelShape> SHAPE_LOWER_MAP = net.minecraft.util.Util.make(new HashMap<>(), map -> {
         for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList()) {
             map.put(direction, GeneralUtil.rotateShape(Direction.NORTH, direction, SHAPE_LOWER));
         }
     });
 
-    public static final Map<Direction, VoxelShape> SHAPE_UPPER_MAP = net.minecraft.Util.make(new HashMap<>(), map -> {
+    public static final Map<Direction, VoxelShape> SHAPE_UPPER_MAP = net.minecraft.util.Util.make(new HashMap<>(), map -> {
         for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList()) {
             map.put(direction, GeneralUtil.rotateShape(Direction.NORTH, direction, SHAPE_UPPER));
         }
