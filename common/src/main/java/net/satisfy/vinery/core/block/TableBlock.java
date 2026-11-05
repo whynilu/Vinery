@@ -1,7 +1,6 @@
 package net.satisfy.vinery.core.block;
 
-import net.satisfy.foundation.block.LineConnectingBlock;
-import net.satisfy.foundation.block.LineConnectingType;
+import net.satisfy.vinery.core.util.GeneralUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,11 +35,11 @@ public class TableBlock extends LineConnectingBlock implements SimpleWaterlogged
 
     public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         Direction direction = state.getValue(FACING);
-        LineConnectingType type = state.getValue(TYPE);
+        GeneralUtil.LineConnectingType type = state.getValue(TYPE);
 
-        if (type == LineConnectingType.MIDDLE) {
+        if (type == GeneralUtil.LineConnectingType.MIDDLE) {
             return TOP_SHAPE;
-        } else if (direction == Direction.NORTH && type == LineConnectingType.LEFT || direction == Direction.SOUTH && type == LineConnectingType.RIGHT) {
+        } else if (direction == Direction.NORTH && type == GeneralUtil.LineConnectingType.LEFT || direction == Direction.SOUTH && type == GeneralUtil.LineConnectingType.RIGHT) {
             return Shapes.or(TOP_SHAPE, LEG_SHAPES[0], LEG_SHAPES[3]);
         } else if ((direction != Direction.NORTH || type != LineConnectingType.RIGHT) && (direction != Direction.SOUTH || type != LineConnectingType.LEFT)) {
             if ((direction != Direction.EAST || type != LineConnectingType.LEFT) && (direction != Direction.WEST || type != LineConnectingType.RIGHT)) {
