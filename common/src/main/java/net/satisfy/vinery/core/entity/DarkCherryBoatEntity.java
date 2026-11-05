@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -88,11 +88,11 @@ public class DarkCherryBoatEntity extends Boat {
             this.chestItem = chestBoatItem;
         }
 
-        public ResourceLocation getTexture(boolean hasChest) {
+        public Identifier getTexture(boolean hasChest) {
             if (hasChest) {
-                return ResourceLocation.fromNamespaceAndPath(Vinery.MOD_ID, "textures/entity/chest_boat/" + name + ".png");
+                return Identifier.fromNamespaceAndPath(Vinery.MOD_ID, "textures/entity/chest_boat/" + name + ".png");
             }
-            return ResourceLocation.fromNamespaceAndPath(Vinery.MOD_ID, "textures/entity/boat/" + name + ".png");
+            return Identifier.fromNamespaceAndPath(Vinery.MOD_ID, "textures/entity/boat/" + name + ".png");
         }
 
         public String getModelLocation() {
