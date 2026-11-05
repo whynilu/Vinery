@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -47,13 +47,13 @@ public class BigTableBlock extends HorizontalDirectionalBlock {
 		return shape;
 	};
 
-	public static final Map<Direction, VoxelShape> SHAPE = net.minecraft.Util.make(new HashMap<>(), map -> {
+	public static final Map<Direction, VoxelShape> SHAPE = net.minecraft.util.Util.make(new HashMap<>(), map -> {
 		for (Direction direction : Direction.Plane.HORIZONTAL) {
 			map.put(direction, GeneralUtil.rotateShape(Direction.EAST, direction, voxelShapeSupplier.get()));
 		}
 	});
 	
-	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+	public static final EnumProperty FACING = HorizontalDirectionalBlock.FACING;
 	
 	public BigTableBlock(Properties settings) {
 		super(settings);
