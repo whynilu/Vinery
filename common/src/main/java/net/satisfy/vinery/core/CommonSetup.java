@@ -14,7 +14,6 @@ public final class CommonSetup {
 
     public static void init() {
         registerFlammables();
-        registerCompostables();
     }
 
     private static void registerFlammables() {
@@ -30,10 +29,6 @@ public final class CommonSetup {
         for (Block block : blocks) {
             fireBlock.setFlammable(block, burnOdd, igniteOdd);
         }
-    }
-
-    private static void registerCompostables() {
-        CompostableRegistry.registerCompostable();
     }
 
 }
