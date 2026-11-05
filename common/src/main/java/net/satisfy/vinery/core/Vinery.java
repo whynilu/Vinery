@@ -3,7 +3,6 @@ package net.satisfy.vinery.core;
 import dev.architectury.registry.fuel.FuelRegistry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Blocks;
-import dev.architectury.hooks.block.BlockTransformerHooks;
 import net.satisfy.vinery.core.command.WineDebugCommands;
 import net.satisfy.vinery.core.event.EventHandler;
 import net.satisfy.vinery.core.registry.*;
@@ -37,11 +36,5 @@ public class Vinery {
         WineEffectSetup.setupWineEffects();
         FuelRegistry.register(1000, ObjectRegistry.DARK_CHERRY_FENCE.get(), ObjectRegistry.DARK_CHERRY_FENCE_GATE.get(), ObjectRegistry.STACKABLE_LOG.get(), ObjectRegistry.FERMENTATION_BARREL.get());
 
-        BlockTransformerHooks.addStrippable(ObjectRegistry.DARK_CHERRY_LOG.get(), ObjectRegistry.STRIPPED_DARK_CHERRY_LOG.get());
-        BlockTransformerHooks.addStrippable(ObjectRegistry.DARK_CHERRY_WOOD.get(), ObjectRegistry.STRIPPED_DARK_CHERRY_WOOD.get());
-        BlockTransformerHooks.addStrippable(ObjectRegistry.APPLE_LOG.get(), Blocks.STRIPPED_OAK_LOG);
-        BlockTransformerHooks.addStrippable(ObjectRegistry.APPLE_WOOD.get(), Blocks.STRIPPED_OAK_WOOD);
-        
-        BlockTransformerHooks.addFlattenable(ObjectRegistry.GRASS_SLAB.get(), Blocks.DIRT_PATH.defaultBlockState());
     }
 }
