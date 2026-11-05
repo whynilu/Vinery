@@ -1,9 +1,5 @@
 apply plugin: 'com.gradleup.shadow'
 
-architectury {
-    fabric()
-}
-
 loom {
     accessWidenerPath = project(':common').loom.accessWidenerPath
 }
@@ -13,7 +9,6 @@ configurations {
     shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentFabric.extendsFrom common
 }
 
 dependencies {
@@ -25,7 +20,7 @@ dependencies {
     implementation "maven.modrinth:mOgUt4GM:${rootProject.modmenu_version}"
 
     common(project(path: ':common')) { transitive = false }
-    shadowCommon(project(path: ':common', configuration: 'transformProductionFabric')) { transitive = false }
+    shadowCommon(project(path: ':common')) { transitive = false }
 }
 
 processResources {
