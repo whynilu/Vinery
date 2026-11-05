@@ -2,7 +2,7 @@ package net.satisfy.vinery.core.util;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.trading.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
