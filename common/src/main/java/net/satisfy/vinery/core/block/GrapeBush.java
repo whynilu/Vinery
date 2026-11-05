@@ -1,14 +1,11 @@
 package net.satisfy.vinery.core.block;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,6 +16,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -41,10 +39,6 @@ public class GrapeBush extends BushBlock implements BonemealableBlock {
     private static final VoxelShape SHAPE;
 
     public final GrapeType type;
-    public static final MapCodec<GrapeBush> CODEC = RecordCodecBuilder.mapCodec(inst-> inst.group(
-            Properties.CODEC.fieldOf("settings").forGetter(GrapeBush::properties),
-            GrapeType.CODEC.fieldOf("type").forGetter(GrapeBush::grapeType)
-    ).apply(inst,GrapeBush::new));
     public GrapeBush(Properties settings, GrapeType type) {
         super(settings);
         this.type = type;
@@ -55,12 +49,6 @@ public class GrapeBush extends BushBlock implements BonemealableBlock {
         return SHAPE;
     }
 
-    @Override
-    protected MapCodec<? extends BushBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
     public ItemStack getCloneItemStack(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
         return new ItemStack(this.grapeType().getSeeds());
     }
@@ -72,11 +60,11 @@ public class GrapeBush extends BushBlock implements BonemealableBlock {
         if (!bl && stack.is(Items.BONE_MEAL)) {
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         } else if (i > 1) {
-            int x = world.random.nextInt(2);
+            int x = world.getRandom().nextInt(2);
             popResource(world, pos, new ItemStack(getGrapeType().getItem(), x + (bl ? 1 : 0)));
-            world.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + world.random.nextFloat() * 0.4F);
+            world.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + world.getRandom().nextFloat() * 0.4F);
             world.setBlock(pos, state.setValue(AGE, 1), 2);
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            return (world.isClientSide() ? InteractionResult.SUCCESS : InteractionResult.SUCCESS_SERVER);
         } else {
             return super.useItemOn(stack,state, world, pos, player, hand, hit);
         }
@@ -99,12 +87,12 @@ public class GrapeBush extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState) {
+    public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, BonemealSource source) {
         return blockState.getValue(AGE) < 3;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level world, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         return true;
     }
 
@@ -119,7 +107,7 @@ public class GrapeBush extends BushBlock implements BonemealableBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
-        return floor.isSolidRender(world, pos);
+        return floor.isSolidRender();
     }
 
     public GrapeType grapeType() {
@@ -132,7 +120,7 @@ public class GrapeBush extends BushBlock implements BonemealableBlock {
 
 
     @Override
-    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state, BonemealSource source) {
         int i = Math.min(3, state.getValue(AGE) + 1);
         world.setBlock(pos, state.setValue(AGE, i), 2);
     }
