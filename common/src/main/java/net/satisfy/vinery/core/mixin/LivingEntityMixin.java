@@ -49,7 +49,7 @@ public abstract class LivingEntityMixin extends Entity {
 			if (foodComponent != null) {
 				List<FoodProperties.PossibleEffect> list = foodComponent.getEffects();
 				for (FoodProperties.PossibleEffect effect : list) {
-					if (world.isClientSide || effect.effect() == null || !(world.random.nextFloat() < effect.probability())) continue;
+					if (world.isClientSide() || effect.effect() == null || !(world.getRandom().nextFloat() < effect.probability())) continue;
 					MobEffectInstance statusEffectInstance = new MobEffectInstance(effect.effect());
 					statusEffectInstance.amplifier = WineYears.getEffectLevel(stack, world);
 					if(statusEffectInstance.getEffect().equals(MobEffects.HEAL) || statusEffectInstance.getEffect().equals(MobEffects.HARM)){
