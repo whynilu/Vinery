@@ -54,7 +54,3 @@ sourcesJar {
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }
-
-tasks.named('assemble') {
-    dependsOn tasks.named('shadowJar')
-}
