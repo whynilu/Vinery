@@ -53,11 +53,11 @@ public abstract class StorageBlock extends FacingBlock implements EntityBlock {
                 }
                 if (!shelfBlockEntity.getInventory().get(i).isEmpty()) {
                     remove(world, pos, player, shelfBlockEntity, i);
-                    return InteractionResult.sidedSuccess(world.isClientSide);
+                    return InteractionResult.sidedSuccess(world.isClientSide());
                 } else {
                     if (!stack.isEmpty() && canInsertStack(stack)) {
                         add(world, pos, player, shelfBlockEntity, stack, i);
-                        return InteractionResult.sidedSuccess(world.isClientSide);
+                        return InteractionResult.sidedSuccess(world.isClientSide());
                     } else {
                         return InteractionResult.CONSUME;
                     }
@@ -69,7 +69,7 @@ public abstract class StorageBlock extends FacingBlock implements EntityBlock {
     }
 
     public void add(Level level, BlockPos blockPos, Player player, StorageBlockEntity shelfBlockEntity, ItemStack itemStack, int i) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             SoundEvent soundEvent = getAddSound(level, blockPos, player, i);
             shelfBlockEntity.setStack(i, itemStack.split(1));
             level.playSound(null, blockPos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -80,12 +80,12 @@ public abstract class StorageBlock extends FacingBlock implements EntityBlock {
         }
     }
     public void remove(Level level, BlockPos blockPos, Player player, StorageBlockEntity shelfBlockEntity, int i) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             ItemStack itemStack = shelfBlockEntity.removeStack(i);
             SoundEvent soundEvent = getRemoveSound(level, blockPos, player, i);
             level.playSound(null, blockPos, soundEvent, SoundSource.BLOCKS, 1.0F, 1.0F);
             if (!player.getInventory().add(itemStack)) {
-                player.drop(itemStack, false);
+                player.drop(itemStack, false, net.minecraft.util.Prediction.SERVER_ONLY);
             }
             level.gameEvent(player, GameEvent.BLOCK_CHANGE, blockPos);
         }
