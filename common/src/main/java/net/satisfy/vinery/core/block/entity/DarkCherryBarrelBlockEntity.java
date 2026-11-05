@@ -99,14 +99,12 @@ public class DarkCherryBarrelBlockEntity extends RandomizableContainerBlockEntit
         return new ChestMenu(MenuType.GENERIC_9x3, syncId, playerInventory, this, 3);
     }
 
-    @Override
     public void startOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
             this.stateManager.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState(), 1.0);
         }
     }
 
-    @Override
     public void stopOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
             this.stateManager.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
