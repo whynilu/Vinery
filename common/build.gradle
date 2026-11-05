@@ -12,8 +12,8 @@ repositories {
 dependencies {
     // Compile against Foundation without bundling it; the Fabric mod declares it as a runtime dependency.
     compileOnly("net.satisfy.foundation:foundation-common:${rootProject.foundation_version}") { transitive = false }
-    modImplementation("net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}") { exclude group: 'net.fabricmc', module: 'fabric-loader' }
-    modApi("dev.architectury:architectury:${rootProject.architectury_version}") { exclude group: 'net.fabricmc', module: 'fabric-loader' }
+    compileOnly("net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}") { exclude group: 'net.fabricmc', module: 'fabric-loader' }
+    api("dev.architectury:architectury:${rootProject.architectury_version}") { exclude group: 'net.fabricmc', module: 'fabric-loader' }
 
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly("me.shedaniel:RoughlyEnoughItems-api:${rei_version}") { exclude group: 'net.fabricmc', module: 'fabric-loader' }
