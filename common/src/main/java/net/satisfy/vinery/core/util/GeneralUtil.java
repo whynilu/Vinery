@@ -7,7 +7,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
 import io.netty.buffer.Unpooled;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -18,10 +18,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -31,14 +29,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -102,8 +99,8 @@ public class GeneralUtil {
         return null;
     }
 
-    public static ItemInteractionResult onUse(Level world, Player player, InteractionHand hand, BlockHitResult hit, double extraHeight) {
-        if (world.isClientSide) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    public static InteractionResult onUse(Level world, Player player, InteractionHand hand, BlockHitResult hit, double extraHeight) {
+        if (world.isClientSide) return ItemInteractionResult.TRY_WITH_EMPTY_HAND;
         if (player.isShiftKeyDown()) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (GeneralUtil.isPlayerSitting(player)) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         if (hit.getDirection() == Direction.DOWN) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -116,7 +113,7 @@ public class GeneralUtil {
             BlockState s = world.getBlockState(hitPos);
             float yaw = 0.0F;
             for (var p : s.getProperties()) {
-                if (p.getName().equals("facing") && p instanceof DirectionProperty dp) {
+                if (p.getName().equals("facing") && p instanceof EnumProperty<?> dp) {
                     yaw = s.getValue(dp).toYRot();
                     break;
                 }
@@ -253,7 +250,7 @@ public class GeneralUtil {
     }
 
     private static void popResource(Level level, ItemEntity itemEntity, ItemStack itemStack) {
-        if (!level.isClientSide && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+        if (!level.isClientSide && !itemStack.isEmpty() && level.getGameRules().getBoolean(GameRules.BLOCK_DROPS)) {
             itemEntity.setDefaultPickUpDelay();
             level.addFreshEntity(itemEntity);
         }
@@ -272,7 +269,7 @@ public class GeneralUtil {
         return buffer[0];
     }
 
-    public static Optional<Tuple<Float, Float>> getRelativeHitCoordinatesForBlockFace(
+    public static Optional<Pair<Float, Float>> getRelativeHitCoordinatesForBlockFace(
             BlockHitResult blockHitResult,
             Direction direction,
             Direction[] unAllowedDirections) {
@@ -305,7 +302,7 @@ public class GeneralUtil {
                 : hitDirection;
 
         return switch (effectiveDirection) {
-            case NORTH -> Optional.of(new Tuple<>(1.0f - x, y));
+            case NORTH -> Optional.of(Pair.of(1.0f - x, y));
             case SOUTH -> Optional.of(new Tuple<>(x, y));
             case WEST -> Optional.of(new Tuple<>(z, y));
             case EAST -> Optional.of(new Tuple<>(1.0f - z, y));
