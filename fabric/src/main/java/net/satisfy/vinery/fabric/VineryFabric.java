@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -37,7 +37,7 @@ public class VineryFabric implements ModInitializer {
 
         Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(Vinery.MOD_ID);
         modContainer.ifPresent(container -> ResourceManagerHelper.registerBuiltinResourcePack(
-                ResourceLocation.fromNamespaceAndPath(Vinery.MOD_ID, "bushy_leaves"),
+                Identifier.fromNamespaceAndPath(Vinery.MOD_ID, "bushy_leaves"),
                 container,
                 ResourcePackActivationType.NORMAL
         ));
