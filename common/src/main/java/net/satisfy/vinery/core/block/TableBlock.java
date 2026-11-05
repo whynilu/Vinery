@@ -41,7 +41,7 @@ public class TableBlock extends LineConnectingBlock implements SimpleWaterlogged
             return TOP_SHAPE;
         } else if (direction == Direction.NORTH && type == GeneralUtil.LineConnectingType.LEFT || direction == Direction.SOUTH && type == GeneralUtil.LineConnectingType.RIGHT) {
             return Shapes.or(TOP_SHAPE, LEG_SHAPES[0], LEG_SHAPES[3]);
-        } else if ((direction != Direction.NORTH || type != LineConnectingType.RIGHT) && (direction != Direction.SOUTH || type != LineConnectingType.LEFT)) {
+        } else if ((direction != Direction.NORTH || type != GeneralUtil.LineConnectingType.RIGHT) && (direction != Direction.SOUTH || type != LineConnectingType.LEFT)) {
             if ((direction != Direction.EAST || type != LineConnectingType.LEFT) && (direction != Direction.WEST || type != LineConnectingType.RIGHT)) {
                 return (direction != Direction.EAST || type != LineConnectingType.RIGHT) && (direction != Direction.WEST || type != LineConnectingType.LEFT)
                         ? Shapes.or(TOP_SHAPE, LEG_SHAPES)
