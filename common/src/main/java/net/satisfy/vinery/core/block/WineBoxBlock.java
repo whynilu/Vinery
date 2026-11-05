@@ -3,7 +3,7 @@ package net.satisfy.vinery.core.block;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -125,7 +125,7 @@ public class WineBoxBlock extends StorageBlock {
     }
 
     @Override
-    public ResourceLocation type() {
+    public Identifier type() {
         return StorageTypeRegistry.WINE_BOX;
     }
 
