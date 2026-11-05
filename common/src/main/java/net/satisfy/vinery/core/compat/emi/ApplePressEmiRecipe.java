@@ -5,7 +5,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.satisfy.vinery.core.registry.ObjectRegistry;
@@ -13,7 +13,7 @@ import net.satisfy.vinery.core.registry.ObjectRegistry;
 public class ApplePressEmiRecipe extends BasicEmiRecipe {
     private final boolean requiresBottle;
 
-    public ApplePressEmiRecipe(EmiRecipeCategory category, ResourceLocation id, Ingredient input, ItemStack output, boolean requiresBottle) {
+    public ApplePressEmiRecipe(EmiRecipeCategory category, Identifier id, Ingredient input, ItemStack output, boolean requiresBottle) {
         super(category, id, 82, 26);
         this.requiresBottle = requiresBottle;
         this.inputs.add(EmiIngredient.of(input));
