@@ -3,7 +3,8 @@ package net.satisfy.vinery.core.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -143,8 +144,8 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, items, true, provider);
         tag.putIntArray(PROGRESS_KEY, cookingProgress);
         tag.putIntArray(TOTAL_KEY, cookingTime);
@@ -152,8 +153,8 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         items.clear();
         ContainerHelper.loadAllItems(tag, items, provider);
         int[] progress = tag.getIntArray(PROGRESS_KEY);
@@ -161,7 +162,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
         int[] total = tag.getIntArray(TOTAL_KEY);
         System.arraycopy(total, 0, cookingTime, 0, Math.min(SLOTS, total.length));
         if (tag.contains(BURN_TIME_KEY)) {
-            burnTime = tag.getInt(BURN_TIME_KEY);
+            burnTime = tag.getInt(BURN_TIME_KEY).orElse(0);
         }
     }
 
