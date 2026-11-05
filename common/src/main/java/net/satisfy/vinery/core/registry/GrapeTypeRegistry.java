@@ -1,6 +1,6 @@
 package net.satisfy.vinery.core.registry;
 
-import net.satisfy.vinery.core.wine.GrapeType;
+import net.satisfy.vinery.core.util.GrapeType;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
