@@ -77,8 +77,8 @@ public class SpreadableGrassSlabBlock extends SlabBlock implements BonemealableB
             return true;
         }
 
-        int i = LightEngine.getLightBlockInto(world, GRASS_BLOCK.defaultBlockState(), pos, blockState, blockPos, Direction.UP, blockState.getLightBlock(world, blockPos));
-        return i < world.getMaxLightLevel();
+        int i = LightEngine.getLightDampeningInto(GRASS_BLOCK.defaultBlockState(), blockState, Direction.UP, blockState.getLightDampening());
+        return i < LightEngine.MAX_LEVEL;
     }
 
     @Override
