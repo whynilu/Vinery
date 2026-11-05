@@ -1,7 +1,8 @@
 package net.satisfy.vinery.core.block.entity;
 
 import net.minecraft.core.*;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
@@ -90,7 +91,7 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
     public void setFluidLevel(int fluidLevel) {
         this.fluidLevel = fluidLevel;
         setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
         }
     }
@@ -139,26 +140,26 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
     }
 
     @Override
-    public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider) {
-        super.loadAdditional(nbt,provider);
+    protected void loadAdditional(ValueInput nbt) {
+        super.loadAdditional(nbt);
         this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(nbt, this.inventory,provider);
-        this.fermentationTime = nbt.getInt("FermentationTime");
-        this.fluidLevel = nbt.getInt("FluidLevel");
-        this.juiceType = nbt.getString("JuiceType");
+        ContainerHelper.loadAllItems(nbt, this.inventory);
+        this.fermentationTime = nbt.getInt("FermentationTime").orElse(0);
+        this.fluidLevel = nbt.getInt("FluidLevel").orElse(0);
+        this.juiceType = nbt.getString("JuiceType").orElse("");
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt,HolderLookup.Provider provider) {
-        super.saveAdditional(nbt,provider);
-        ContainerHelper.saveAllItems(nbt, this.inventory,provider);
+    protected void saveAdditional(ValueOutput nbt) {
+        super.saveAdditional(nbt);
+        ContainerHelper.saveAllItems(nbt, this.inventory);
         nbt.putInt("FermentationTime", this.fermentationTime);
         nbt.putInt("FluidLevel", this.fluidLevel);
         nbt.putString("JuiceType", this.juiceType);
     }
 
     public static void tick(Level world, BlockPos pos, FermentationBarrelBlockEntity blockEntity) {
-        if (world.isClientSide) return;
+        if (world.isClientSide()) return;
 
         if (blockEntity.fluidLevel == 0) {
             blockEntity.setJuiceType("");
