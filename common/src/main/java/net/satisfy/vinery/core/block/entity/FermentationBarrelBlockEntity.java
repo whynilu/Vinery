@@ -180,7 +180,7 @@ public class FermentationBarrelBlockEntity extends BlockEntity implements Implem
                 new FermentationBarrelRecipeInput.JuiceData(blockEntity.juiceType, blockEntity.fluidLevel)
         );
 
-        var recipeHolder = world.getRecipeManager()
+        var recipeHolder = world.recipeAccess()
                 .getRecipeFor(RecipeTypesRegistry.FERMENTATION_BARREL_RECIPE_TYPE.get(), input, world);
 
         if (recipeHolder.isEmpty()) {
