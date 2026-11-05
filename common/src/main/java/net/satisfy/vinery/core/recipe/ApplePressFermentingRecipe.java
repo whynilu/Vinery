@@ -92,37 +92,29 @@ public class ApplePressFermentingRecipe implements Recipe<ApplePressFermentingRe
         return true;
     }
 
-    public static class Serializer implements RecipeSerializer<ApplePressFermentingRecipe> {
+    private static final MapCodec<Boolean> WINE_BOTTLE_CODEC = RecordCodecBuilder.mapCodec(inst ->
+            inst.group(Codec.BOOL.fieldOf("required").forGetter(b -> b)).apply(inst, b -> b)
+    );
 
-        private static final MapCodec<Boolean> WINE_BOTTLE_CODEC = RecordCodecBuilder.mapCodec(inst ->
-                inst.group(
-                        Codec.BOOL.fieldOf("required").forGetter(b -> b)
-                ).apply(inst, b -> b)
-        );
-        @Override
-        public MapCodec<ApplePressFermentingRecipe> codec() {
-            return RecordCodecBuilder.mapCodec(inst->inst.group(
-                   Ingredient.CODEC.fieldOf("input").forGetter(ApplePressFermentingRecipe::getInput),
-                   ItemStack.CODEC.fieldOf("output").forGetter(ApplePressFermentingRecipe::getOutput),
-                    WINE_BOTTLE_CODEC.fieldOf("wine_bottle").forGetter(ApplePressFermentingRecipe::isRequiresBottle)
-            ).apply(inst,ApplePressFermentingRecipe::new));
-        }
+    public static final MapCodec<ApplePressFermentingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(ApplePressFermentingRecipe::getInput),
+            ItemStack.CODEC.fieldOf("output").forGetter(ApplePressFermentingRecipe::getOutput),
+            WINE_BOTTLE_CODEC.fieldOf("wine_bottle").forGetter(ApplePressFermentingRecipe::isRequiresBottle)
+    ).apply(inst, ApplePressFermentingRecipe::new));
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ApplePressFermentingRecipe> streamCodec() {
-            return new StreamCodec<RegistryFriendlyByteBuf, ApplePressFermentingRecipe>() {
-                @Override
-                public ApplePressFermentingRecipe decode(RegistryFriendlyByteBuf buf) {
-                    return new ApplePressFermentingRecipe(Ingredient.CONTENTS_STREAM_CODEC.decode(buf),ItemStack.STREAM_CODEC.decode(buf),buf.readBoolean());
-                }
+    public static final StreamCodec<RegistryFriendlyByteBuf, ApplePressFermentingRecipe> STREAM_CODEC = StreamCodec.of(
+            (buf, recipe) -> {
+                Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.getInput());
+                ItemStack.STREAM_CODEC.encode(buf, recipe.getOutput());
+                buf.writeBoolean(recipe.isRequiresBottle());
+            },
+            buf -> new ApplePressFermentingRecipe(
+                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                    ItemStack.STREAM_CODEC.decode(buf),
+                    buf.readBoolean()
+            )
+    );
 
-                @Override
-                public void encode(RegistryFriendlyByteBuf buf, ApplePressFermentingRecipe recipe) {
-                    Ingredient.CONTENTS_STREAM_CODEC.encode(buf,recipe.getInput());
-                    ItemStack.STREAM_CODEC.encode(buf,recipe.getOutput());
-                    buf.writeBoolean(recipe.isRequiresBottle());
-                }
-            };
-        }
-    }
+    public static final RecipeSerializer<ApplePressFermentingRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
 }
