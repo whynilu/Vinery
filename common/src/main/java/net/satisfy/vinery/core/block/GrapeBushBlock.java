@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -64,11 +63,11 @@ public class GrapeBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull ItemInteractionResult useItemOn(ItemStack stack,BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    public @NotNull InteractionResult useItemOn(ItemStack stack,BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         int i = state.getValue(AGE);
         boolean bl = i == 3;
         if (!bl && stack.is(Items.BONE_MEAL)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return ItemInteractionResult.TRY_WITH_EMPTY_HAND;
         } else if (i > 1) {
             int x = level.random.nextInt(2);
             popResource(level, pos, new ItemStack(getGrapeType().getItem(), x + (bl ? 1 : 0)));
