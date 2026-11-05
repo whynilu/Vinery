@@ -79,7 +79,6 @@ public class ChairEntity extends Entity {
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) { return false; }
 
-    @Override
     public boolean isControlledByLocalInstance() {
         return false;
     }
