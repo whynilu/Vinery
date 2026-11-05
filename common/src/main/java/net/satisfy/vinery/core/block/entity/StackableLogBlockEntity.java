@@ -52,7 +52,7 @@ public class StackableLogBlockEntity extends BlockEntity implements Clearable {
             entity.cooldownTick();
             return;
         }
-        if (--entity.burnTime <= 0 || level.isRainingAt(pos.above()) && level.random.nextInt(100) == 0) {
+        if (--entity.burnTime <= 0 || level.isRainingAt(pos.above()) && level.getRandom().nextInt(100) == 0) {
             StackableLogBlock.extinguish(level, pos, state);
             return;
         }
