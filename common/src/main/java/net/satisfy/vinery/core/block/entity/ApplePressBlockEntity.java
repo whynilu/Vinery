@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.chat.Component;
@@ -124,6 +125,7 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
     @Override
     public void tick(Level world, BlockPos pos, BlockState state, ApplePressBlockEntity entity) {
         if (world.isClientSide()) return;
+        ServerLevel serverWorld = (ServerLevel) world;
 
         boolean dirty = false;
 
@@ -132,7 +134,7 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
             if(world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(),input,world).isEmpty()) {
                 return;
             }
-            Recipe<?> recipe1 = world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(),input,level).get().value();
+            Recipe<?> recipe1 = world.getRecipeManager().getRecipeFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get(),input,serverWorld).get().value();
             if (recipe1 instanceof ApplePressMashingRecipe mashingRecipe) {
                 if (canProcessMashing(entity, mashingRecipe)) {
                     entity.progress1++;
@@ -270,8 +272,8 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
 
     private boolean isValidForApplePressMashing(ItemStack stack) {
         if (level == null) return false;
-        return level.getRecipeManager()
-                .getAllRecipesFor(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get())
+        return level instanceof ServerLevel serverLevel ? serverLevel.recipeAccess().recipeMap() : net.minecraft.world.item.crafting.RecipeMap.EMPTY
+                .byType(RecipeTypesRegistry.APPLE_PRESS_MASHING_RECIPE_TYPE.get())
                 .stream()
                 .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
     }
@@ -279,7 +281,7 @@ public class ApplePressBlockEntity extends BlockEntity implements MenuProvider, 
     private boolean isValidForApplePressFermenting(ItemStack stack) {
         if (level == null) return false;
         return level.getRecipeManager()
-                .getAllRecipesFor(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get())
+                .byType(RecipeTypesRegistry.APPLE_PRESS_FERMENTING_RECIPE_TYPE.get())
                 .stream()
                 .anyMatch(recipe -> recipe.value().getIngredients().stream().anyMatch(ingredient -> ingredient.test(stack)));
     }
