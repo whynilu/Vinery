@@ -79,7 +79,7 @@ public class CabinetBlockEntity extends RandomizableContainerBlockEntity {
             }
 
             @Override
-            protected boolean isOwnContainer(Player player) {
+            public boolean isOwnContainer(Player player) {
                 if (player.containerMenu instanceof ChestMenu) {
                     Container inventory = ((ChestMenu) player.containerMenu).getContainer();
                     return inventory == CabinetBlockEntity.this;
