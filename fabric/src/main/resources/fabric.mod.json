@@ -31,9 +31,6 @@
     "client": [
       "net.satisfy.vinery.fabric.client.VineryClientFabric"
     ],
-    "rei_client": [
-      "net.satisfy.vinery.fabric.core.rei.VineryReiClientPluginFabric"
-    ],
     "modmenu": [
       "net.satisfy.vinery.fabric.config.ModMenu"
     ]
