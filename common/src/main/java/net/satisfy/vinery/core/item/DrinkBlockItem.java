@@ -120,6 +120,21 @@ public class DrinkBlockItem extends BlockItem {
         return Minecraft.getInstance().level;
     }
 
+
+    @Override
+    public InteractionResult place(BlockPlaceContext context) {
+        InteractionResult result = super.place(context);
+        if (result.consumesAction() && !context.getLevel().isClientSide()
+                && context.getLevel().getBlockEntity(context.getClickedPos()) instanceof StorageBlockEntity wineEntity) {
+            ItemStack storedBottle = context.getItemInHand().copyWithCount(1);
+            if (storedBottle.get(DataComponentRegistry.WINE_YEAR.get()) == null) {
+                WineYears.setWineYear(storedBottle, context.getLevel());
+            }
+            wineEntity.setStack(0, storedBottle);
+        }
+        return result;
+    }
+
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack itemStack, Level level, LivingEntity livingEntity) {
         if (!level.isClientSide() && effectSupplier != null) {
