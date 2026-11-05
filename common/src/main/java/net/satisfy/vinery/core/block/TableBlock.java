@@ -37,11 +37,11 @@ public class TableBlock extends LineConnectingBlock implements SimpleWaterlogged
         Direction direction = state.getValue(FACING);
         GeneralUtil.LineConnectingType type = state.getValue(TYPE);
 
-        if (type == GeneralUtil.GeneralUtil.LineConnectingType.MIDDLE) {
+        if (type == GeneralUtil.LineConnectingType.MIDDLE) {
             return TOP_SHAPE;
-        } else if (direction == Direction.NORTH && type == GeneralUtil.GeneralUtil.LineConnectingType.LEFT || direction == Direction.SOUTH && type == GeneralUtil.GeneralUtil.LineConnectingType.RIGHT) {
+        } else if (direction == Direction.NORTH && type == GeneralUtil.LineConnectingType.LEFT || direction == Direction.SOUTH && type == GeneralUtil.LineConnectingType.RIGHT) {
             return Shapes.or(TOP_SHAPE, LEG_SHAPES[0], LEG_SHAPES[3]);
-        } else if ((direction != Direction.NORTH || type != GeneralUtil.GeneralUtil.LineConnectingType.RIGHT) && (direction != Direction.SOUTH || type != GeneralUtil.LineConnectingType.LEFT)) {
+        } else if ((direction != Direction.NORTH || type != GeneralUtil.LineConnectingType.RIGHT) && (direction != Direction.SOUTH || type != GeneralUtil.LineConnectingType.LEFT)) {
             if ((direction != Direction.EAST || type != GeneralUtil.LineConnectingType.LEFT) && (direction != Direction.WEST || type != GeneralUtil.LineConnectingType.RIGHT)) {
                 return (direction != Direction.EAST || type != GeneralUtil.LineConnectingType.RIGHT) && (direction != Direction.WEST || type != GeneralUtil.LineConnectingType.LEFT)
                         ? Shapes.or(TOP_SHAPE, LEG_SHAPES)
