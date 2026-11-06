@@ -7,7 +7,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +40,7 @@ public final class WinemakerBootsRenderer implements ArmorRenderer {
 
         this.model.copyLegs(contextModel.rightLeg, contextModel.leftLeg);
 
-        RenderType renderType = RenderType.entityCutoutNoCull(boots.getBootsTexture());
+        var renderType = RenderTypes.armorCutoutNoCull(boots.getBootsTexture());
         poseStack.pushPose();
         poseStack.scale(1.08F, 1.08F, 1.08F);
         poseStack.translate(0.0F, -0.125F, 0.0F);

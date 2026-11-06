@@ -7,7 +7,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -39,11 +39,11 @@ public final class StrawHatRenderer implements ArmorRenderer {
                     .getChild("top_part");
         }
 
-        this.hatPart.copyFrom(contextModel.head);
+        this.hatPart.loadPose(contextModel.head.storePose());
         submitNodeCollector.submitModelPart(
                 this.hatPart,
                 poseStack,
-                RenderType.entityCutoutNoCull(hat.getHatTexture()),
+                RenderTypes.armorCutoutNoCull(hat.getHatTexture()),
                 light,
                 OverlayTexture.NO_OVERLAY,
                 null

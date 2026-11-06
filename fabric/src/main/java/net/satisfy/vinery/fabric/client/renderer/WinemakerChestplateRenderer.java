@@ -7,7 +7,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +46,7 @@ public final class WinemakerChestplateRenderer implements ArmorRenderer {
                 contextModel.rightLeg
         );
 
-        RenderType renderType = RenderType.entityCutoutNoCull(chestplate.getChestplateTexture());
+        var renderType = RenderTypes.armorCutoutNoCull(chestplate.getChestplateTexture());
         poseStack.pushPose();
         poseStack.scale(1.075F, 1.075F, 1.075F);
         submitNodeCollector.submitModelPart(this.model.bodyPart(), poseStack, renderType, light, OverlayTexture.NO_OVERLAY, null);

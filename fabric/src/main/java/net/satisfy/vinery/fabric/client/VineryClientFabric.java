@@ -7,6 +7,7 @@ import net.satisfy.vinery.client.util.fabric.ExtraModelsImpl;
 public final class VineryClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        VineryArmorModelLayers.register();
         ExtraModelsImpl.register();
     }
 }
