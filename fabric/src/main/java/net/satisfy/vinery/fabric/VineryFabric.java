@@ -61,7 +61,7 @@ public class VineryFabric implements ModInitializer {
             );
             Compostable compostable = new Compostable(ResolvableInt.fromKey(
                     ResourceKey.create(Registries.CONTEXT_INT_PROVIDER, Vinery.identifier("compost_40_percent"))));
-            context.modify(compostables, builder -> builder.set(DataComponents.COMPOSTABLE, compostable));
+            context.modify(compostables, (builder, item) -> builder.set(DataComponents.COMPOSTABLE, compostable));
         });
     }
 
