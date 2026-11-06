@@ -49,6 +49,14 @@ public class WinemakerBootsModel<T extends LivingEntity> extends EntityModel<T> 
     public void setupAnim(@NotNull T entity, float f, float g, float h, float i, float j) {
     }
 
+    public ModelPart rightLegPart() {
+        return right_leg;
+    }
+
+    public ModelPart leftLegPart() {
+        return left_leg;
+    }
+
     public void copyLegs(ModelPart rightLegModel, ModelPart leftLegModel) {
         this.right_leg.copyFrom(rightLegModel);
         this.left_leg.copyFrom(leftLegModel);
