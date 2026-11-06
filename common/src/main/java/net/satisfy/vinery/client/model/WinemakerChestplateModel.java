@@ -63,6 +63,12 @@ public class WinemakerChestplateModel<T extends LivingEntity> extends EntityMode
     public void setupAnim(@NotNull T entity, float f, float g, float h, float i, float j) {
     }
 
+    public ModelPart bodyPart() { return body; }
+    public ModelPart rightArmPart() { return right_arm; }
+    public ModelPart leftArmPart() { return left_arm; }
+    public ModelPart rightLegPart() { return right_leg; }
+    public ModelPart leftLegPart() { return left_leg; }
+
     public void copyBody(ModelPart baseBody, ModelPart leftArm, ModelPart rightArm, ModelPart leftLeg, ModelPart rightLeg) {
         this.body.copyFrom(baseBody);
         this.left_arm.copyFrom(leftArm);
