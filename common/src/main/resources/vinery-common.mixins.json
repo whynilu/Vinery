@@ -8,7 +8,6 @@
     "BlockMixin",
     "BoneMealItemMixin",
     "ExperienceOrbMixin",
-    "FoxEatBerriesGoalMixin",
     "LivingEntityMixin",
     "BushBlockMixin",
     "StorageBlockEntityMixin",
