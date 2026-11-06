@@ -1,7 +1,7 @@
 package net.satisfy.vinery.client.util;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.resources.Identifier;
 import net.satisfy.vinery.core.Vinery;
 
@@ -35,7 +35,7 @@ public final class ExtraModels {
     }
 
     @ExpectPlatform
-    public static BakedModel get(Identifier id) {
+    public static BlockStateModel get(Identifier id) {
         throw new AssertionError();
     }
 }
